@@ -1,0 +1,81 @@
+@reference "../../index.css";
+
+.pageWrapper {
+  @apply min-h-screen py-12;
+}
+
+.container {
+  @apply mx-auto max-w-3xl px-6;
+}
+
+.headerSection {
+  @apply mb-8;
+}
+
+.title {
+  @apply mb-4 text-4xl font-bold;
+}
+
+.subtitle {
+  @apply text-lg text-muted-foreground;
+}
+
+.successContainer {
+  @apply py-12 text-center;
+}
+
+.successIcon {
+  @apply mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-950;
+}
+
+.successCheckIcon {
+  @apply h-8 w-8 text-green-600;
+}
+
+.successTitle {
+  @apply mb-2 text-xl font-semibold;
+}
+
+.successDescription {
+  @apply text-muted-foreground;
+}
+
+.submitAnotherButton {
+  @apply mt-6;
+}
+
+.form {
+  @apply space-y-6;
+}
+
+.formGroup {
+  @apply space-y-2;
+}
+
+.ratingInfo {
+  @apply text-sm text-muted-foreground;
+}
+
+.errorField {
+  @apply flex items-center gap-1 text-sm text-destructive;
+}
+
+.errorIcon {
+  @apply h-4 w-4;
+}
+
+.buttonRow {
+  @apply flex gap-4;
+}
+
+.submitButton {
+  @apply flex-1;
+}
+
+.formHint {
+  @apply text-sm text-muted-foreground;
+}
+
+.textareaError {
+  @apply border-destructive;
+}

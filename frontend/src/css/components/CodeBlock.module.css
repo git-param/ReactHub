@@ -1,0 +1,33 @@
+@reference "../../index.css";
+
+.wrapper {
+  @apply relative rounded-xl overflow-hidden;
+}
+
+.copyButton {
+  @apply absolute top-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-200;
+}
+
+.copyIcon {
+  @apply w-3.5 h-3.5;
+}
+
+.codeArea {
+  @apply overflow-x-auto p-4 pr-20;
+}
+
+.codePre {
+  @apply text-sm leading-6 font-mono;
+}
+
+.codeLine {
+  @apply flex;
+}
+
+.lineNumber {
+  @apply select-none text-right mr-6 flex-shrink-0;
+}
+
+.lineContent {
+  @apply flex-1;
+}

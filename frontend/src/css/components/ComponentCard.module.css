@@ -1,0 +1,45 @@
+@reference "../../index.css";
+
+.card {
+  @apply rounded-2xl cursor-pointer transition-all duration-200 overflow-hidden;
+}
+
+.cardHeader {
+  @apply flex items-center justify-between px-4 pt-4 pb-2;
+}
+
+.cardTitle {
+  @apply text-sm font-semibold text-white truncate;
+}
+
+.cardCategory {
+  @apply text-xs font-medium flex-shrink-0 ml-2;
+}
+
+.demoWrapper {
+  @apply relative mx-3 mb-3;
+}
+
+.demoSlot {
+  @apply aspect-[4/3] rounded-xl overflow-hidden flex items-center justify-center;
+}
+
+.likeButton {
+  @apply absolute top-3 right-3 w-9 h-9 rounded-full flex items-center justify-center opacity-0 transition-all duration-200 z-10;
+}
+
+.card:hover .likeButton {
+  @apply opacity-100;
+}
+
+.heartIcon {
+  @apply w-4 h-4 transition-colors duration-200;
+}
+
+.heartIconLiked {
+  @apply text-pink-400 fill-pink-400;
+}
+
+.heartIconDefault {
+  @apply text-white/60;
+}

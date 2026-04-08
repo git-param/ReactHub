@@ -1,0 +1,93 @@
+@reference "../../index.css";
+
+.pageWrapper {
+  @apply flex min-h-screen;
+}
+
+.formSide {
+  @apply flex flex-1 items-center justify-center p-8;
+}
+
+.formWrapper {
+  @apply w-full max-w-md;
+}
+
+.logoSection {
+  @apply mb-8;
+}
+
+.logoLink {
+  @apply inline-flex items-center gap-3 text-2xl font-bold;
+}
+
+.logoText {
+  @apply bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent;
+}
+
+.form {
+  @apply space-y-4;
+}
+
+.formGroup {
+  @apply space-y-2;
+}
+
+.passwordWrapper {
+  @apply relative;
+}
+
+.passwordInput {
+  @apply pr-10;
+}
+
+.passwordToggle {
+  @apply absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 text-muted-foreground hover:text-foreground;
+}
+
+.icon {
+  @apply h-4 w-4;
+}
+
+.rememberRow {
+  @apply flex items-center justify-between;
+}
+
+.rememberCheckbox {
+  @apply flex items-center space-x-2;
+}
+
+.rememberLabel {
+  @apply cursor-pointer text-sm font-normal;
+}
+
+.submitButton {
+  @apply w-full;
+}
+
+.errorText {
+  @apply text-sm text-destructive;
+}
+
+.signupSection {
+  @apply mt-6 text-center text-sm text-muted-foreground;
+}
+
+.signupLink {
+  @apply font-medium text-blue-600 hover:underline;
+}
+
+.brandingSide {
+  @apply hidden flex-1 bg-gradient-to-br from-purple-600 to-blue-600 p-12 lg:flex lg:items-center lg:justify-center;
+}
+
+.brandingContent {
+  @apply max-w-md text-white;
+}
+
+.brandingTitle {
+  @apply mb-4 text-4xl font-bold;
+}
+
+.brandingText {
+  @apply text-lg text-purple-100;
+}

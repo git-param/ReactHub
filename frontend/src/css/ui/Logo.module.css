@@ -1,0 +1,13 @@
+@reference "../../index.css";
+
+.wrapper {
+  @apply relative flex items-center justify-center;
+}
+
+.glowEffect {
+  @apply absolute inset-0 bg-purple-500/20 blur-xl rounded-full;
+}
+
+.svgIcon {
+  @apply relative z-10 transition-transform hover:scale-105 duration-300 drop-shadow-lg;
+}

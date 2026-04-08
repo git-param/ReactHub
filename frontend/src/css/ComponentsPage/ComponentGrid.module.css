@@ -1,0 +1,49 @@
+@reference "../../index.css";
+
+.grid {
+  @apply grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3;
+}
+
+.skeletonCard {
+  @apply animate-pulse;
+}
+
+.skeletonImage {
+  @apply aspect-video w-full rounded-t-2xl bg-[var(--secondary)];
+}
+
+.skeletonContent {
+  @apply space-y-3 p-4;
+}
+
+.skeletonTitle {
+  @apply h-5 w-3/4 rounded bg-[var(--muted)];
+}
+
+.skeletonLine {
+  @apply h-4 w-full rounded bg-[var(--muted)];
+}
+
+.skeletonLineShort {
+  @apply h-4 w-2/3 rounded bg-[var(--muted)];
+}
+
+.emptyState {
+  @apply flex min-h-[400px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[var(--border)] bg-[var(--card)] py-16;
+}
+
+.emptyIconWrapper {
+  @apply mb-6 rounded-full bg-white p-5 shadow-sm dark:bg-gray-900;
+}
+
+.emptyIcon {
+  @apply h-16 w-16 text-gray-400 dark:text-gray-300;
+}
+
+.emptyTitle {
+  @apply mb-3 text-2xl font-bold text-gray-900 dark:text-gray-100;
+}
+
+.emptyDescription {
+  @apply text-base text-gray-500 max-w-md dark:text-gray-300 text-center;
+}

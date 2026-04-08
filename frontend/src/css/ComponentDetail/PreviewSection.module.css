@@ -1,0 +1,17 @@
+@reference "../../index.css";
+
+.wrapper {
+  @apply border p-10 rounded-xl mb-8;
+}
+
+.title {
+  @apply text-xl font-semibold mb-6;
+}
+
+.previewContainer {
+  @apply w-full min-h-[260px] rounded-lg border border-white/5 bg-black/20 p-4 flex items-center justify-center overflow-hidden;
+}
+
+.previewContent {
+  @apply w-full h-full flex items-center justify-center;
+}

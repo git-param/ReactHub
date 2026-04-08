@@ -1,0 +1,106 @@
+@reference "../../index.css";
+
+.mainLayout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+
+    background-color: var(--bg-primary);
+    border-bottom: 1px solid var(--border-primary);
+}
+
+.leftSection {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+}
+
+.centerSection {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.centerSection span,
+.centerSection a {
+    color: var(--text-primary);
+    cursor: pointer;
+    font-weight: 500;
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+
+.centerSection span:hover,
+.centerSection a:hover {
+    opacity: 0.8;
+}
+
+.rightSection {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.loginText {
+    color: var(--text-primary);
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.loginText:hover {
+    opacity: 0.8;
+}
+
+.signUpBtn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.themeBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .centerSection {
+        display: none;
+    }
+
+    .mainLayout {
+        padding: 1rem;
+    }
+
+    .rightSection {
+        gap: 0.8rem;
+    }
+}
+
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.logoutBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.logoText {
+  @apply text-xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent;
+}

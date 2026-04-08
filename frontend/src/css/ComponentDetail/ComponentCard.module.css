@@ -1,0 +1,17 @@
+@reference "../../index.css";
+
+.cardWrapper {
+  @apply border rounded-lg p-4 hover:shadow-lg;
+}
+
+.previewImage {
+  @apply rounded-md mb-3;
+}
+
+.cardTitle {
+  @apply font-semibold;
+}
+
+.cardDescription {
+  @apply text-sm text-gray-500;
+}

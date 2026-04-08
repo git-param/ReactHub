@@ -1,0 +1,50 @@
+.starRow {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.starButton {
+  border: 0;
+  background: transparent;
+  padding: 0.2rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transform: scale(1);
+  transition: transform 180ms ease, filter 240ms ease;
+}
+
+.starButton:hover,
+.starButton:focus-visible {
+  transform: scale(1.12);
+  outline: none;
+  filter: brightness(1.08);
+}
+
+.starIcon {
+  width: 1.9rem;
+  height: 1.9rem;
+  transition: fill 280ms ease, color 280ms ease, transform 180ms ease;
+}
+
+.pop {
+  animation: star-pop 260ms ease-out;
+}
+
+@keyframes star-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  35% {
+    transform: scale(1.28);
+  }
+
+  70% {
+    transform: scale(0.92);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

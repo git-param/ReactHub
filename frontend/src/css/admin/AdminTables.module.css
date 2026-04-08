@@ -1,0 +1,181 @@
+@reference "../../index.css";
+
+.sectionWrapper {
+  @apply mb-10;
+}
+
+.tableTitle {
+  @apply text-xl font-bold text-white mb-1;
+}
+
+.tableDescription {
+  @apply text-zinc-500 text-sm mb-4;
+}
+
+.tableShell {
+  @apply overflow-x-auto rounded-xl border border-white/5 bg-white/5;
+}
+
+.table {
+  @apply w-full text-left border-collapse;
+}
+
+.headerRow {
+  @apply border-b border-white/5 bg-white/[0.02];
+}
+
+.headerCell {
+  @apply px-6 py-4 text-zinc-400 text-xs font-semibold uppercase tracking-wider;
+}
+
+.headerCellRight {
+  @apply px-6 py-4 text-right text-zinc-400 text-xs font-semibold uppercase tracking-wider;
+}
+
+.tableBody {
+  @apply divide-y divide-white/5;
+}
+
+.dataRow {
+  @apply hover:bg-white/[0.02] transition-colors;
+}
+
+.stateCell {
+  @apply px-6 py-8 text-center text-sm italic;
+}
+
+.cellId {
+  @apply px-6 py-4 text-zinc-300 text-sm font-mono;
+}
+
+.cellPrimary {
+  @apply px-6 py-4 text-white text-sm font-medium;
+}
+
+.cellSecondary {
+  @apply px-6 py-4 text-zinc-400 text-sm;
+}
+
+.cellMuted {
+  @apply px-6 py-4 text-zinc-500 text-sm;
+}
+
+.cellDetail {
+  @apply px-6 py-4 text-white text-sm;
+}
+
+.cellActions {
+  @apply px-6 py-4 text-right;
+}
+
+.cellStatus {
+  @apply px-6 py-4;
+}
+
+.statusBadge {
+  @apply px-2 py-1 rounded-full text-[10px] font-bold uppercase;
+}
+
+.errorBanner {
+  @apply mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm;
+}
+
+.deleteButton {
+  @apply px-3 py-1 rounded-lg bg-rose-500/10 text-rose-400 text-xs font-semibold hover:bg-rose-500 hover:text-white transition-colors border border-rose-500/20;
+}
+
+.viewDetailsButton {
+  @apply px-3 py-1 rounded-lg bg-white/5 text-zinc-300 text-xs font-semibold hover:bg-white/10 transition-colors border border-white/10;
+}
+
+.approveButton {
+  @apply px-3 py-1 rounded-lg bg-emerald-500 text-white text-xs font-semibold hover:bg-emerald-600 disabled:opacity-60 transition-colors;
+}
+
+.rejectButton {
+  @apply px-3 py-1 rounded-lg bg-rose-500/10 text-rose-400 text-xs font-semibold hover:bg-rose-500 hover:text-white disabled:opacity-60 transition-colors border border-rose-500/20;
+}
+
+.actionsGroup {
+  @apply flex justify-end gap-2;
+}
+
+.modalOverlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm;
+}
+
+.modalContent {
+  @apply w-full max-w-md rounded-2xl border border-white/10 bg-[#0f0f16] p-6;
+}
+
+.modalTitle {
+  @apply text-lg font-semibold text-white mb-2;
+}
+
+.modalText {
+  @apply text-zinc-400 text-sm mb-6;
+}
+
+.modalActions {
+  @apply flex justify-end gap-3;
+}
+
+.cancelButton {
+  @apply px-4 py-2 rounded-lg text-zinc-300 bg-white/5 hover:bg-white/10 transition-colors;
+}
+
+.confirmDeleteButton {
+  @apply px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-60 text-white font-semibold transition-colors;
+}
+
+.expandedModalContent {
+  @apply w-full max-w-2xl rounded-2xl border border-white/10 bg-[#0f0f16] p-6;
+}
+
+.expandedModalHeader {
+  @apply flex items-start justify-between gap-4 mb-4;
+}
+
+.expandedModalTitle {
+  @apply text-lg font-semibold text-white;
+}
+
+.expandedModalMeta {
+  @apply text-zinc-500 text-xs mt-1;
+}
+
+.closeButton {
+  @apply text-zinc-500 hover:text-white transition-colors;
+}
+
+.expandedModalBody {
+  @apply rounded-xl bg-white/5 border border-white/10 p-4 max-h-[50vh] overflow-y-auto;
+}
+
+.expandedModalDescription {
+  @apply text-sm text-zinc-200 whitespace-pre-wrap;
+}
+
+.actionBadge {
+  @apply px-2 py-1 rounded-lg bg-white/5 text-zinc-300 text-[10px] font-bold uppercase;
+}
+
+.toneError {
+  @apply text-rose-400;
+}
+
+.toneNeutral {
+  @apply text-zinc-500;
+}
+
+.statusPending {
+  @apply bg-amber-500/20 text-amber-400 border border-amber-500/30;
+}
+
+.statusApproved {
+  @apply bg-emerald-500/20 text-emerald-400 border border-emerald-500/30;
+}
+
+.statusRejected {
+  @apply bg-rose-500/20 text-rose-400 border border-rose-500/30;
+}

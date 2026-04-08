@@ -1,0 +1,21 @@
+@reference "../../index.css";
+
+.loadingState {
+  @apply max-w-5xl mx-auto p-10 text-white;
+}
+
+.notFoundState {
+  @apply max-w-5xl mx-auto p-10 text-white;
+}
+
+.pageWrapper {
+  @apply max-w-5xl mx-auto p-10;
+}
+
+.title {
+  @apply text-3xl font-bold mb-4;
+}
+
+.description {
+  @apply mb-8;
+}

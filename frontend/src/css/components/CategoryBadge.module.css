@@ -1,0 +1,13 @@
+@reference "../../index.css";
+
+.badge {
+  @apply text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide leading-none inline-flex items-center;
+}
+
+.badgePro {
+  @apply bg-pink-100 text-pink-600;
+}
+
+.badgeProPlus {
+  @apply bg-orange-100 text-orange-600;
+}

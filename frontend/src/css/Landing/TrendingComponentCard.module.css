@@ -1,0 +1,36 @@
+@reference "../../index.css";
+
+.card {
+  background-color: var(--bg-primary);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  @apply rounded-xl p-6 border;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.categoryBadge {
+  @apply text-xs px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300;
+}
+
+.cardTitle {
+  @apply mt-4 text-lg font-semibold;
+}
+
+.cardDescription {
+  @apply mt-2 text-sm text-gray-500 dark:text-gray-400;
+}
+
+.cardFooter {
+  @apply flex justify-between items-center mt-6 text-sm text-gray-500 dark:text-gray-400;
+}
+
+.statsRow {
+  @apply flex gap-4;
+}
+
+.viewButton {
+  @apply font-medium hover:underline;
+}
