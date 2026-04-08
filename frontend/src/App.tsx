@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/Landing";
-import GalleryPage from "./pages/GalleryPage";
 import ComponentDetailPage from "./pages/ComponentDetailPage";
 import ComponentPage from "./pages/Components";
 import RequestPage from "./pages/Request";
@@ -31,7 +30,6 @@ function App() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/signup" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
