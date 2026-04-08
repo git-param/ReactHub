@@ -1,0 +1,937 @@
+{
+  "users": [
+    {
+      "name": "Admin Sir",
+      "email": "admin@gmail.com",
+      "password": "Admin@1234",
+      "role": "admin",
+      "id": "1"
+    },
+    {
+      "name": "Yash",
+      "email": "yash@gmail.com",
+      "password": "Yash@1234",
+      "id": "2"
+    },
+    {
+      "name": "aksh",
+      "email": "aksh@gmail.com",
+      "password": "s$SP$#Gpz6N2zqsVk^nn",
+      "id": "3"
+    },
+    {
+      "id": "3a34",
+      "name": "Param Dholakia",
+      "email": "param.inexture@gmail.com",
+      "password": "Param@2004"
+    },
+    {
+      "id": "271a",
+      "name": "Jadeja",
+      "email": "mouryrajjadeja@gmail.com",
+      "password": "Mj@banna8"
+    },
+    {
+      "id": "134f",
+      "name": "Yash Patel",
+      "email": "yash123@gmail.com",
+      "password": "Yash@123",
+      "role": "user"
+    },
+    {
+      "id": "440f",
+      "name": "Param Dholakia",
+      "email": "param@gmail.com",
+      "password": "Param1234@",
+      "role": "user"
+    }
+  ],
+  "components": [
+    {
+      "id": "animated-list",
+      "slug": "animated-list",
+      "name": "Animated List",
+      "category": "Components",
+      "description": "A smooth animated scrollable list with keyboard navigation and gradient overlays.",
+      "framework": [
+        "React 18",
+        "TypeScript",
+        "Motion"
+      ],
+      "votes": [
+        "3a34",
+        "3bc4",
+        "499a"
+      ],
+      "comments": [],
+      "author": {
+        "name": "John Doe",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+      },
+      "previewImage": "https://placehold.co/600x400/6366f1/ffffff?text=Animated+List",
+      "installCmd": {
+        "pnpm": "pnpm add motion",
+        "npm": "npm install motion",
+        "yarn": "yarn add motion",
+        "bun": "bun add motion"
+      },
+      "componentCode": "import { useState, useEffect, useRef, useCallback } from 'react';\nimport { AnimatePresence, motion } from 'motion/react';\n\ninterface AnimatedListProps {\n  items?: string[];\n  onItemSelect?: (item: string, index: number) => void;\n  showGradients?: boolean;\n  enableArrowNavigation?: boolean;\n  displayScrollbar?: boolean;\n}\n\nfunction AnimatedList({\n  items = [],\n  onItemSelect,\n  showGradients = true,\n  enableArrowNavigation = true,\n  displayScrollbar = true,\n}: AnimatedListProps) {\n  const [selectedIndex, setSelectedIndex] = useState<number>(-1);\n  const listRef = useRef<HTMLDivElement>(null);\n\n  const handleSelect = useCallback(\n    (index: number) => {\n      setSelectedIndex(index);\n      onItemSelect?.(items[index], index);\n    },\n    [items, onItemSelect]\n  );\n\n  useEffect(() => {\n    if (!enableArrowNavigation) return;\n    const handleKeyDown = (e: KeyboardEvent) => {\n      if (e.key === 'ArrowDown') {\n        e.preventDefault();\n        setSelectedIndex((prev) => {\n          const next = prev < items.length - 1 ? prev + 1 : 0;\n          onItemSelect?.(items[next], next);\n          return next;\n        });\n      } else if (e.key === 'ArrowUp') {\n        e.preventDefault();\n        setSelectedIndex((prev) => {\n          const next = prev > 0 ? prev - 1 : items.length - 1;\n          onItemSelect?.(items[next], next);\n          return next;\n        });\n      }\n    };\n    const el = listRef.current;\n    el?.addEventListener('keydown', handleKeyDown);\n    return () => el?.removeEventListener('keydown', handleKeyDown);\n  }, [enableArrowNavigation, items, onItemSelect]);\n\n  useEffect(() => {\n    if (selectedIndex >= 0 && listRef.current) {\n      const selectedEl = listRef.current.querySelector(\n        `[data-index=\"${selectedIndex}\"]`\n      );\n      selectedEl?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });\n    }\n  }, [selectedIndex]);\n\n  return (\n    <div className=\"scroll-list-container\" tabIndex={0} ref={listRef}>\n      {showGradients && <div className=\"scroll-gradient-top\" />}\n      <div className={`scroll-list ${displayScrollbar ? '' : 'hide-scrollbar'}`}>\n        <AnimatePresence initial={false}>\n          {items.map((item, index) => (\n            <motion.div\n              key={item}\n              initial={{ opacity: 0, y: 20 }}\n              animate={{ opacity: 1, y: 0 }}\n              exit={{ opacity: 0, y: -20 }}\n              transition={{ duration: 0.3, delay: index * 0.05 }}\n              data-index={index}\n              className={`scroll-list-item ${selectedIndex === index ? 'selected' : ''}`}\n              onClick={() => handleSelect(index)}\n            >\n              <span className=\"scroll-list-item-text\">{item}</span>\n              <span className=\"scroll-list-item-icon\">→</span>\n            </motion.div>\n          ))}\n        </AnimatePresence>\n      </div>\n      {showGradients && <div className=\"scroll-gradient-bottom\" />}\n    </div>\n  );\n}\n\nexport default AnimatedList;",
+      "cssCode": ".scroll-list-container {\n  position: relative;\n  width: 500px;\n  max-width: 100%;\n  outline: none;\n}\n\n.scroll-list {\n  display: flex;\n  flex-direction: column;\n  gap: 6px;\n  max-height: 400px;\n  overflow-y: auto;\n  padding: 8px;\n  scrollbar-width: thin;\n  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;\n}\n\n.scroll-list.hide-scrollbar {\n  scrollbar-width: none;\n  -ms-overflow-style: none;\n}\n\n.scroll-list.hide-scrollbar::-webkit-scrollbar {\n  display: none;\n}\n\n.scroll-list::-webkit-scrollbar {\n  width: 6px;\n}\n\n.scroll-list::-webkit-scrollbar-track {\n  background: transparent;\n}\n\n.scroll-list::-webkit-scrollbar-thumb {\n  background: rgba(255, 255, 255, 0.15);\n  border-radius: 3px;\n}\n\n.scroll-list-item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 12px 16px;\n  border-radius: 12px;\n  cursor: pointer;\n  transition: all 0.2s ease;\n  background: rgba(255, 255, 255, 0.04);\n  border: 1px solid rgba(255, 255, 255, 0.06);\n  user-select: none;\n}\n\n.scroll-list-item:hover {\n  background: rgba(255, 255, 255, 0.08);\n  border-color: rgba(255, 255, 255, 0.12);\n  transform: translateX(4px);\n}\n\n.scroll-list-item.selected {\n  background: rgba(139, 92, 246, 0.15);\n  border-color: rgba(139, 92, 246, 0.3);\n}\n\n.scroll-list-item-text {\n  font-size: 14px;\n  font-weight: 500;\n  color: rgba(255, 255, 255, 0.85);\n}\n\n.scroll-list-item.selected .scroll-list-item-text {\n  color: #a78bfa;\n}\n\n.scroll-list-item-icon {\n  font-size: 14px;\n  color: rgba(255, 255, 255, 0.3);\n  transition: all 0.2s ease;\n}\n\n.scroll-list-item:hover .scroll-list-item-icon,\n.scroll-list-item.selected .scroll-list-item-icon {\n  color: rgba(255, 255, 255, 0.7);\n  transform: translateX(2px);\n}\n\n.scroll-gradient-top,\n.scroll-gradient-bottom {\n  position: absolute;\n  left: 0;\n  right: 0;\n  height: 40px;\n  pointer-events: none;\n  z-index: 2;\n}\n\n.scroll-gradient-top {\n  top: 0;\n  background: linear-gradient(to bottom, #060010, transparent);\n}\n\n.scroll-gradient-bottom {\n  bottom: 0;\n  background: linear-gradient(to top, #060010, transparent);\n}",
+      "usageCode": "import AnimatedList from './AnimatedList'\nimport './AnimatedList.css'\n\nconst items = [\n  'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5',\n  'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10'\n];\n\n<AnimatedList\n  items={items}\n  onItemSelect={(item, index) => console.log(item, index)}\n  showGradients\n  enableArrowNavigation\n  displayScrollbar\n/>",
+      "userId": "1",
+      "createdAt": "2026-03-01T10:00:00Z",
+      "status": "published"
+    },
+    {
+      "id": "1",
+      "slug": "animated-button",
+      "name": "Animated Button",
+      "description": "A beautiful button component with smooth hover animations",
+      "category": "Buttons",
+      "framework": [
+        "React 18",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "votes": [
+        "3a34"
+      ],
+      "comments": [
+        {
+          "id": "fd122587-c6ec-4adf-a2b0-748251420c10",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "kjsdbcjkwb",
+          "createdAt": 1772971040715
+        },
+        {
+          "id": "dbb49987-2895-401f-a850-e7c3a84c64bb",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "testing",
+          "createdAt": 1772972466031
+        },
+        {
+          "id": "dbd6c7f5-951e-40e2-b073-a2b6a8ddc100",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "testing 2",
+          "createdAt": 1772975923207
+        }
+      ],
+      "author": {
+        "name": "John Doe",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+      },
+      "previewImage": "https://placehold.co/600x400/6366f1/ffffff?text=Animated+Button",
+      "installCmd": "npm install framer-motion",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "12",
+      "slug": "tooltip",
+      "name": "Tooltip",
+      "description": "Simple tooltip component that appears on hover.",
+      "category": "Overlays",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [
+        "3a34"
+      ],
+      "comments": [
+        {
+          "id": "e5ce5aba-a174-491f-9498-42ddbc7d81d2",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "kdacbhiwb",
+          "createdAt": 1772973433502
+        }
+      ],
+      "author": {
+        "name": "Alice Cooper",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alice"
+      },
+      "previewImage": "https://placehold.co/600x400/6366f1/ffffff?text=Tooltip",
+      "componentPath": "overlays/12",
+      "installCmd": "npm install",
+      "css": "module",
+      "status": "published"
+    },
+    {
+      "id": "13",
+      "slug": "accordion",
+      "name": "Accordion",
+      "description": "Expandable accordion component for FAQs and content sections.",
+      "category": "Layouts",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Michael Scott",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael"
+      },
+      "previewImage": "https://placehold.co/600x400/10b981/ffffff?text=Accordion",
+      "componentPath": "layouts/13",
+      "installCmd": "npm install",
+      "css": "module",
+      "status": "published"
+    },
+    {
+      "id": "14",
+      "slug": "badge",
+      "name": "Badge",
+      "description": "Small badge component for status indicators or labels.",
+      "category": "UI Elements",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Emma Watson",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Emma"
+      },
+      "previewImage": "https://placehold.co/600x400/f59e0b/ffffff?text=Badge",
+      "componentPath": "elements/14",
+      "installCmd": "npm install",
+      "css": "module",
+      "status": "published"
+    },
+    {
+      "id": "15",
+      "slug": "toggle-switch",
+      "name": "Toggle Switch",
+      "description": "Interactive toggle switch component for enabling or disabling settings.",
+      "category": "Inputs",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Robert Downey",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Robert"
+      },
+      "previewImage": "https://placehold.co/600x400/8b5cf6/ffffff?text=Toggle+Switch",
+      "componentPath": "inputs/15",
+      "installCmd": "npm install",
+      "css": "module",
+      "status": "published"
+    },
+    {
+      "id": "2",
+      "slug": "data-table",
+      "name": "Data Table",
+      "description": "Feature-rich data table with sorting, pagination, and filtering capabilities",
+      "category": "Tables",
+      "framework": [
+        "React 18",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Jane Smith",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane"
+      },
+      "previewImage": "https://placehold.co/600x400/8b5cf6/ffffff?text=Data+Table",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "3",
+      "slug": "modal-dialog",
+      "name": "Modal Dialog",
+      "description": "Accessible modal component with backdrop, animations, and keyboard support",
+      "category": "Overlays",
+      "framework": [
+        "React 19",
+        "TypeScript",
+        "Radix UI"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Mike Johnson",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mike"
+      },
+      "previewImage": "https://placehold.co/600x400/ec4899/ffffff?text=Modal+Dialog",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "4",
+      "slug": "login-form",
+      "name": "Login Form",
+      "description": "Complete authentication form with validation, error handling, and loading states",
+      "category": "Forms",
+      "framework": [
+        "React 18",
+        "TypeScript",
+        "React Hook Form"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Sarah Williams",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah"
+      },
+      "previewImage": "https://placehold.co/600x400/3b82f6/ffffff?text=Login+Form",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "5",
+      "slug": "gradient-card",
+      "name": "Gradient Card",
+      "description": "Modern card component with beautiful gradient backgrounds and glass morphism effect",
+      "category": "Cards",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Alex Chen",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Alex"
+      },
+      "previewImage": "https://placehold.co/600x400/10b981/ffffff?text=Gradient+Card",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "6",
+      "slug": "navbar",
+      "name": "Responsive Navbar",
+      "description": "Fully responsive navigation bar with mobile menu and dropdown support",
+      "category": "Navigation",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Emily Davis",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily"
+      },
+      "previewImage": "https://placehold.co/600x400/f59e0b/ffffff?text=Navbar",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "7",
+      "slug": "toast-notification",
+      "name": "Toast Notification",
+      "description": "Lightweight notification system with customizable positions and animations",
+      "category": "Notifications",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "David Lee",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=David"
+      },
+      "previewImage": "https://placehold.co/600x400/ef4444/ffffff?text=Toast",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "8",
+      "slug": "bar-chart",
+      "name": "Bar Chart",
+      "description": "Interactive bar chart component with tooltips and responsive design",
+      "category": "Charts",
+      "framework": [
+        "React 19",
+        "TypeScript",
+        "Recharts"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Lisa Brown",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Lisa"
+      },
+      "previewImage": "https://placehold.co/600x400/8b5cf6/ffffff?text=Bar+Chart",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "9",
+      "slug": "image-gallery",
+      "name": "Image Gallery",
+      "description": "Responsive image gallery with lightbox, zoom, and keyboard navigation",
+      "category": "Media",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Tom Wilson",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Tom"
+      },
+      "previewImage": "https://placehold.co/600x400/06b6d4/ffffff?text=Gallery",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "10",
+      "slug": "dropdown-menu",
+      "name": "Dropdown Menu",
+      "description": "Accessible dropdown component with keyboard support and nested menus",
+      "category": "Menus",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Rachel Green",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rachel"
+      },
+      "previewImage": "https://placehold.co/600x400/a855f7/ffffff?text=Dropdown",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "11",
+      "slug": "skeleton-loader",
+      "name": "Skeleton Loader",
+      "description": "Animated loading skeleton for better perceived performance and UX",
+      "category": "Loaders",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Chris Martin",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Chris"
+      },
+      "previewImage": "https://placehold.co/600x400/6b7280/ffffff?text=Skeleton",
+      "installCmd": "",
+      "css": "tailwind",
+      "status": "published"
+    },
+    {
+      "id": "1773043713249",
+      "slug": "gradient-card",
+      "name": "Gradient Card",
+      "description": "A beautiful card with gradient background and glassmorphism effect",
+      "category": "Cards",
+      "framework": [
+        "React 18",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Admin",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+      },
+      "previewImage": "https://placehold.co/600x400/7c3aed/ffffff?text=Gradient%20Card",
+      "installCmd": "npm install framer-motion",
+      "css": "tailwind",
+      "componentCode": "import React from 'react';\n\ninterface GradientCardProps {\n  title: string;\n  description: string;\n  icon?: string;\n}\n\nexport const GradientCard: React.FC<GradientCardProps> = ({ title, description, icon = 'sparkle' }) => {\n  return (\n    <div className=\"relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br from-violet-600/20 to-indigo-600/20 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-300 group\">\n      <div className=\"absolute inset-0 bg-gradient-to-br from-violet-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity\" />\n      <div className=\"relative z-10\">\n        <span className=\"text-3xl mb-4 block\">{icon}</span>\n        <h3 className=\"text-xl font-bold text-white mb-2\">{title}</h3>\n        <p className=\"text-zinc-400 text-sm leading-relaxed\">{description}</p>\n      </div>\n    </div>\n  );\n};\n\nexport default GradientCard;\n",
+      "cssCode": ".gradient-card { transition: transform 0.3s ease; }\n.gradient-card:hover { transform: translateY(-4px); }\n",
+      "usageCode": "import GradientCard from './GradientCard';\nimport './GradientCard.css';\n\n<GradientCard \n  title=\"Feature One\" \n  description=\"Amazing feature description\" \n  icon=\"rocket\" \n/>\n",
+      "status": "published"
+    },
+    {
+      "id": "1773044194627",
+      "slug": "card-nav",
+      "name": "Card Nav",
+      "description": "nav barrrrr",
+      "category": "Cards",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [
+        "1"
+      ],
+      "comments": [],
+      "author": {
+        "name": "Admin",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+      },
+      "previewImage": "https://placehold.co/600x400/7c3aed/ffffff?text=Card%20Nav",
+      "installCmd": "npm install gsap",
+      "css": "tailwind",
+      "componentCode": "import React, { useLayoutEffect, useRef, useState } from 'react';\nimport { gsap } from 'gsap';\n// use your own icon import if react-icons is not available\nimport { GoArrowUpRight } from 'react-icons/go';\nimport './CardNav.css';\n\ntype CardNavLink = {\n  label: string;\n  href: string;\n  ariaLabel: string;\n};\n\nexport type CardNavItem = {\n  label: string;\n  bgColor: string;\n  textColor: string;\n  links: CardNavLink[];\n};\n\nexport interface CardNavProps {\n  logo: string;\n  logoAlt?: string;\n  items: CardNavItem[];\n  className?: string;\n  ease?: string;\n  baseColor?: string;\n  menuColor?: string;\n  buttonBgColor?: string;\n  buttonTextColor?: string;\n}\n\nconst CardNav: React.FC<CardNavProps> = ({\n  logo,\n  logoAlt = 'Logo',\n  items,\n  className = '',\n  ease = 'power3.out',\n  baseColor = '#fff',\n  menuColor,\n  buttonBgColor,\n  buttonTextColor\n}) => {\n  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);\n  const [isExpanded, setIsExpanded] = useState(false);\n  const navRef = useRef<HTMLDivElement | null>(null);\n  const cardsRef = useRef<HTMLDivElement[]>([]);\n  const tlRef = useRef<gsap.core.Timeline | null>(null);\n\n  const calculateHeight = () => {\n    const navEl = navRef.current;\n    if (!navEl) return 260;\n\n    const isMobile = window.matchMedia('(max-width: 768px)').matches;\n    if (isMobile) {\n      const contentEl = navEl.querySelector('.card-nav-content') as HTMLElement;\n      if (contentEl) {\n        const wasVisible = contentEl.style.visibility;\n        const wasPointerEvents = contentEl.style.pointerEvents;\n        const wasPosition = contentEl.style.position;\n        const wasHeight = contentEl.style.height;\n\n        contentEl.style.visibility = 'visible';\n        contentEl.style.pointerEvents = 'auto';\n        contentEl.style.position = 'static';\n        contentEl.style.height = 'auto';\n\n        contentEl.offsetHeight;\n\n        const topBar = 60;\n        const padding = 16;\n        const contentHeight = contentEl.scrollHeight;\n\n        contentEl.style.visibility = wasVisible;\n        contentEl.style.pointerEvents = wasPointerEvents;\n        contentEl.style.position = wasPosition;\n        contentEl.style.height = wasHeight;\n\n        return topBar + contentHeight + padding;\n      }\n    }\n    return 260;\n  };\n\n  const createTimeline = () => {\n    const navEl = navRef.current;\n    if (!navEl) return null;\n\n    gsap.set(navEl, { height: 60, overflow: 'hidden' });\n    gsap.set(cardsRef.current, { y: 50, opacity: 0 });\n\n    const tl = gsap.timeline({ paused: true });\n\n    tl.to(navEl, {\n      height: calculateHeight,\n      duration: 0.4,\n      ease\n    });\n\n    tl.to(cardsRef.current, { y: 0, opacity: 1, duration: 0.4, ease, stagger: 0.08 }, '-=0.1');\n\n    return tl;\n  };\n\n  useLayoutEffect(() => {\n    const tl = createTimeline();\n    tlRef.current = tl;\n\n    return () => {\n      tl?.kill();\n      tlRef.current = null;\n    };\n  }, [ease, items]);\n\n  useLayoutEffect(() => {\n    const handleResize = () => {\n      if (!tlRef.current) return;\n\n      if (isExpanded) {\n        const newHeight = calculateHeight();\n        gsap.set(navRef.current, { height: newHeight });\n\n        tlRef.current.kill();\n        const newTl = createTimeline();\n        if (newTl) {\n          newTl.progress(1);\n          tlRef.current = newTl;\n        }\n      } else {\n        tlRef.current.kill();\n        const newTl = createTimeline();\n        if (newTl) {\n          tlRef.current = newTl;\n        }\n      }\n    };\n\n    window.addEventListener('resize', handleResize);\n    return () => window.removeEventListener('resize', handleResize);\n  }, [isExpanded]);\n\n  const toggleMenu = () => {\n    const tl = tlRef.current;\n    if (!tl) return;\n    if (!isExpanded) {\n      setIsHamburgerOpen(true);\n      setIsExpanded(true);\n      tl.play(0);\n    } else {\n      setIsHamburgerOpen(false);\n      tl.eventCallback('onReverseComplete', () => setIsExpanded(false));\n      tl.reverse();\n    }\n  };\n\n  const setCardRef = (i: number) => (el: HTMLDivElement | null) => {\n    if (el) cardsRef.current[i] = el;\n  };\n\n  return (\n    <div className={`card-nav-container ${className}`}>\n      <nav ref={navRef} className={`card-nav ${isExpanded ? 'open' : ''}`} style={{ backgroundColor: baseColor }}>\n        <div className=\"card-nav-top\">\n          <div\n            className={`hamburger-menu ${isHamburgerOpen ? 'open' : ''}`}\n            onClick={toggleMenu}\n            role=\"button\"\n            aria-label={isExpanded ? 'Close menu' : 'Open menu'}\n            tabIndex={0}\n            style={{ color: menuColor || '#000' }}\n          >\n            <div className=\"hamburger-line\" />\n            <div className=\"hamburger-line\" />\n          </div>\n\n          <div className=\"logo-container\">\n            <img src={logo} alt={logoAlt} className=\"logo\" />\n          </div>\n\n          <button\n            type=\"button\"\n            className=\"card-nav-cta-button\"\n            style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}\n          >\n            Get Started\n          </button>\n        </div>\n\n        <div className=\"card-nav-content\" aria-hidden={!isExpanded}>\n          {(items || []).slice(0, 3).map((item, idx) => (\n            <div\n              key={`${item.label}-${idx}`}\n              className=\"nav-card\"\n              ref={setCardRef(idx)}\n              style={{ backgroundColor: item.bgColor, color: item.textColor }}\n            >\n              <div className=\"nav-card-label\">{item.label}</div>\n              <div className=\"nav-card-links\">\n                {item.links?.map((lnk, i) => (\n                  <a key={`${lnk.label}-${i}`} className=\"nav-card-link\" href={lnk.href} aria-label={lnk.ariaLabel}>\n                    <GoArrowUpRight className=\"nav-card-link-icon\" aria-hidden=\"true\" />\n                    {lnk.label}\n                  </a>\n                ))}\n              </div>\n            </div>\n          ))}\n        </div>\n      </nav>\n    </div>\n  );\n};\n\nexport default CardNav;\n",
+      "cssCode": ".card-nav-container {\n  position: absolute;\n  top: 2em;\n  left: 50%;\n  transform: translateX(-50%);\n  width: 90%;\n  max-width: 800px;\n  z-index: 99;\n  box-sizing: border-box;\n}\n\n.card-nav {\n  display: block;\n  height: 60px;\n  padding: 0;\n  background-color: white;\n  border: 0.5px solid rgba(255, 255, 255, 0.1);\n  border-radius: 0.75rem;\n  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\n  position: relative;\n  overflow: hidden;\n  will-change: height;\n}\n\n.card-nav-top {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  height: 60px;\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n  padding: 0.5rem 0.45rem 0.55rem 1.1rem;\n  z-index: 2;\n}\n\n.hamburger-menu {\n  height: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  gap: 6px;\n}\n\n.hamburger-menu:hover .hamburger-line {\n  opacity: 0.75;\n}\n\n.hamburger-line {\n  width: 30px;\n  height: 2px;\n  background-color: currentColor;\n  transition:\n    transform 0.25s ease,\n    opacity 0.2s ease,\n    margin 0.3s ease;\n  transform-origin: 50% 50%;\n}\n\n.hamburger-menu.open .hamburger-line:first-child {\n  transform: translateY(4px) rotate(45deg);\n}\n\n.hamburger-menu.open .hamburger-line:last-child {\n  transform: translateY(-4px) rotate(-45deg);\n}\n\n.logo-container {\n  display: flex;\n  align-items: center;\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  transform: translate(-50%, -50%);\n}\n\n.logo {\n  height: 28px;\n}\n\n.card-nav-cta-button {\n  background-color: #111;\n  color: white;\n  border: none;\n  border-radius: calc(0.75rem - 0.35rem);\n  padding: 0 1rem;\n  height: 100%;\n  font-weight: 500;\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n  align-items: center;\n}\n\n.card-nav-cta-button:hover {\n  background-color: #333;\n}\n\n.card-nav-content {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 60px;\n  bottom: 0;\n  padding: 0.5rem;\n  display: flex;\n  align-items: flex-end;\n  gap: 12px;\n  visibility: hidden;\n  pointer-events: none;\n  z-index: 1;\n}\n\n.card-nav.open .card-nav-content {\n  visibility: visible;\n  pointer-events: auto;\n}\n\n.nav-card {\n  height: 100%;\n  flex: 1 1 0;\n  min-width: 0;\n  border-radius: calc(0.75rem - 0.2rem);\n  position: relative;\n  display: flex;\n  flex-direction: column;\n  padding: 12px 16px;\n  gap: 8px;\n  user-select: none;\n}\n\n.nav-card-label {\n  font-weight: 400;\n  font-size: 22px;\n  letter-spacing: -0.5px;\n}\n\n.nav-card-links {\n  margin-top: auto;\n  display: flex;\n  flex-direction: column;\n  gap: 2px;\n}\n\n.nav-card-link {\n  font-size: 16px;\n  cursor: pointer;\n  text-decoration: none;\n  transition: opacity 0.3s ease;\n  display: inline-flex;\n  align-items: center;\n  gap: 6px;\n}\n\n.nav-card-link:hover {\n  opacity: 0.75;\n}\n\n@media (max-width: 768px) {\n  .card-nav-container {\n    width: 90%;\n    top: 1.2em;\n  }\n\n  .card-nav-top {\n    padding: 0.5rem 1rem;\n    justify-content: space-between;\n  }\n\n  .hamburger-menu {\n    order: 2;\n  }\n\n  .logo-container {\n    position: static;\n    transform: none;\n    order: 1;\n  }\n\n  .card-nav-cta-button {\n    display: none;\n  }\n\n  .card-nav-content {\n    flex-direction: column;\n    align-items: stretch;\n    gap: 8px;\n    padding: 0.5rem;\n    bottom: 0;\n    justify-content: flex-start;\n  }\n\n  .nav-card {\n    height: auto;\n    min-height: 60px;\n    flex: 1 1 auto;\n    max-height: none;\n  }\n\n  .nav-card-label {\n    font-size: 18px;\n  }\n\n  .nav-card-link {\n    font-size: 15px;\n  }\n}\n",
+      "usageCode": "import CardNav from './CardNav'\nimport logo from './logo.svg';\n\nconst App = () => {\n  const items = [\n    {\n      label: \"About\",\n      bgColor: \"#0D0716\",\n      textColor: \"#fff\",\n      links: [\n        { label: \"Company\", ariaLabel: \"About Company\" },\n        { label: \"Careers\", ariaLabel: \"About Careers\" }\n      ]\n    },\n    {\n      label: \"Projects\", \n      bgColor: \"#170D27\",\n      textColor: \"#fff\",\n      links: [\n        { label: \"Featured\", ariaLabel: \"Featured Projects\" },\n        { label: \"Case Studies\", ariaLabel: \"Project Case Studies\" }\n      ]\n    },\n    {\n      label: \"Contact\",\n      bgColor: \"#271E37\", \n      textColor: \"#fff\",\n      links: [\n        { label: \"Email\", ariaLabel: \"Email us\" },\n        { label: \"Twitter\", ariaLabel: \"Twitter\" },\n        { label: \"LinkedIn\", ariaLabel: \"LinkedIn\" }\n      ]\n    }\n  ];\n\n  return (\n    <CardNav\n      logo={logo}\n      logoAlt=\"Company Logo\"\n      items={items}\n      baseColor=\"#fff\"\n      menuColor=\"#000\"\n      buttonBgColor=\"#111\"\n      buttonTextColor=\"#fff\"\n      ease=\"power3.out\"\n  theme=\"light\"\n/>\n  );\n};",
+      "status": "published"
+    },
+    {
+      "id": "1773050567102",
+      "slug": "blob-cursor",
+      "name": "Blob Cursor",
+      "description": "Bring a dynamic, fluid, and modern feel to your Framer prototypes and projects with the Blob Cursor Follow component. ",
+      "category": "Components",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Admin",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+      },
+      "previewImage": "https://placehold.co/600x400/7c3aed/ffffff?text=Blob%20Cursor",
+      "installCmd": "npm install gsap",
+      "css": "tailwind",
+      "componentCode": "'use client';\n\nimport React, { useRef, useEffect, useCallback } from 'react';\nimport gsap from 'gsap';\nimport './BlobCursor.css';\n\nexport interface BlobCursorProps {\n  blobType?: 'circle' | 'square';\n  fillColor?: string;\n  trailCount?: number;\n  sizes?: number[];\n  innerSizes?: number[];\n  innerColor?: string;\n  opacities?: number[];\n  shadowColor?: string;\n  shadowBlur?: number;\n  shadowOffsetX?: number;\n  shadowOffsetY?: number;\n  filterId?: string;\n  filterStdDeviation?: number;\n  filterColorMatrixValues?: string;\n  useFilter?: boolean;\n  fastDuration?: number;\n  slowDuration?: number;\n  fastEase?: string;\n  slowEase?: string;\n  zIndex?: number;\n}\n\nexport default function BlobCursor({\n  blobType = 'circle',\n  fillColor = '#5227FF',\n  trailCount = 3,\n  sizes = [60, 125, 75],\n  innerSizes = [20, 35, 25],\n  innerColor = 'rgba(255,255,255,0.8)',\n  opacities = [0.6, 0.6, 0.6],\n  shadowColor = 'rgba(0,0,0,0.75)',\n  shadowBlur = 5,\n  shadowOffsetX = 10,\n  shadowOffsetY = 10,\n  filterId = 'blob',\n  filterStdDeviation = 30,\n  filterColorMatrixValues = '1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 35 -10',\n  useFilter = true,\n  fastDuration = 0.1,\n  slowDuration = 0.5,\n  fastEase = 'power3.out',\n  slowEase = 'power1.out',\n  zIndex = 100\n}: BlobCursorProps) {\n  const containerRef = useRef<HTMLDivElement>(null);\n  const blobsRef = useRef<(HTMLDivElement | null)[]>([]);\n\n  const updateOffset = useCallback(() => {\n    if (!containerRef.current) return { left: 0, top: 0 };\n    const rect = containerRef.current.getBoundingClientRect();\n    return { left: rect.left, top: rect.top };\n  }, []);\n\n  const handleMove = useCallback(\n    (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {\n      const { left, top } = updateOffset();\n      const x = 'clientX' in e ? e.clientX : e.touches[0].clientX;\n      const y = 'clientY' in e ? e.clientY : e.touches[0].clientY;\n\n      blobsRef.current.forEach((el, i) => {\n        if (!el) return;\n        const isLead = i === 0;\n        gsap.to(el, {\n          x: x - left,\n          y: y - top,\n          duration: isLead ? fastDuration : slowDuration,\n          ease: isLead ? fastEase : slowEase\n        });\n      });\n    },\n    [updateOffset, fastDuration, slowDuration, fastEase, slowEase]\n  );\n\n  useEffect(() => {\n    const onResize = () => updateOffset();\n    window.addEventListener('resize', onResize);\n    return () => window.removeEventListener('resize', onResize);\n  }, [updateOffset]);\n\n  return (\n    <div\n      ref={containerRef}\n      className=\"blob-container\"\n      style={{ zIndex }}\n      onMouseMove={handleMove}\n      onTouchMove={handleMove}\n    >\n      {useFilter && (\n        <svg style={{ position: 'absolute', width: 0, height: 0 }}>\n          <filter id={filterId}>\n            <feGaussianBlur in=\"SourceGraphic\" result=\"blur\" stdDeviation={filterStdDeviation} />\n            <feColorMatrix in=\"blur\" values={filterColorMatrixValues} />\n          </filter>\n        </svg>\n      )}\n\n      <div className=\"blob-main\" style={{ filter: useFilter ? `url(#${filterId})` : undefined }}>\n        {Array.from({ length: trailCount }).map((_, i) => (\n          <div\n            key={i}\n            ref={el => {\n              blobsRef.current[i] = el;\n            }}\n            className=\"blob\"\n            style={{\n              width: sizes[i],\n              height: sizes[i],\n              borderRadius: blobType === 'circle' ? '50%' : '0%',\n              backgroundColor: fillColor,\n              opacity: opacities[i],\n              boxShadow: `${shadowOffsetX}px ${shadowOffsetY}px ${shadowBlur}px 0 ${shadowColor}`\n            }}\n          >\n            <div\n              className=\"inner-dot\"\n              style={{\n                width: innerSizes[i],\n                height: innerSizes[i],\n                top: (sizes[i] - innerSizes[i]) / 2,\n                left: (sizes[i] - innerSizes[i]) / 2,\n                backgroundColor: innerColor,\n                borderRadius: blobType === 'circle' ? '50%' : '0%'\n              }}\n            />\n          </div>\n        ))}\n      </div>\n    </div>\n  );\n}\n",
+      "cssCode": ".blob-container {\n  position: relative;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n}\n\n.blob-main {\n  pointer-events: none;\n  position: absolute;\n  width: 100%;\n  height: 100%;\n  overflow: hidden;\n  background: transparent;\n  user-select: none;\n  cursor: default;\n}\n\n.blob {\n  position: absolute;\n  will-change: transform;\n  transform: translate(-50%, -50%);\n}\n\n.inner-dot {\n  position: absolute;\n}\n",
+      "usageCode": "import BlobCursor from './BlobCursor';\n\n<BlobCursor\n  blobType=\"circle\"\n  fillColor=\"#5227FF\"\n  trailCount={3}\n  sizes={[60,125,75]}\n  innerSizes={[20,35,25]}\n  innerColor=\"rgba(255,255,255,0.8)\"\n  opacities={[0.6,0.6,0.6]}\n  shadowColor=\"rgba(0,0,0,0.75)\"\n  shadowBlur={5}\n  shadowOffsetX={10}\n  shadowOffsetY={10}\n  filterStdDeviation={30}\n  useFilter={true}\n  fastDuration={0.1}\n  slowDuration={0.5}\n  zIndex={100}\n/>",
+      "status": "published"
+    },
+    {
+      "id": "1773052116049",
+      "slug": "beams",
+      "name": "Beams",
+      "description": "Animation Of Landing Page",
+      "category": "Animations",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Admin",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+      },
+      "previewImage": "https://placehold.co/600x400/7c3aed/ffffff?text=Beams",
+      "installCmd": "npm install three @react-three/fiber @react-three/drei",
+      "css": "tailwind",
+      "componentCode": "import { forwardRef, useImperativeHandle, useEffect, useRef, useMemo, FC, ReactNode } from 'react';\n\nimport * as THREE from 'three';\n\nimport { Canvas, useFrame } from '@react-three/fiber';\nimport { PerspectiveCamera } from '@react-three/drei';\nimport { degToRad } from 'three/src/math/MathUtils.js';\n\nimport './Beams.css';\n\ntype UniformValue = THREE.IUniform<unknown> | unknown;\n\ninterface ExtendMaterialConfig {\n  header: string;\n  vertexHeader?: string;\n  fragmentHeader?: string;\n  material?: THREE.MeshPhysicalMaterialParameters & { fog?: boolean };\n  uniforms?: Record<string, UniformValue>;\n  vertex?: Record<string, string>;\n  fragment?: Record<string, string>;\n}\n\ntype ShaderWithDefines = THREE.ShaderLibShader & {\n  defines?: Record<string, string | number | boolean>;\n};\n\nfunction extendMaterial<T extends THREE.Material = THREE.Material>(\n  BaseMaterial: new (params?: THREE.MaterialParameters) => T,\n  cfg: ExtendMaterialConfig\n): THREE.ShaderMaterial {\n  const physical = THREE.ShaderLib.physical as ShaderWithDefines;\n  const { vertexShader: baseVert, fragmentShader: baseFrag, uniforms: baseUniforms } = physical;\n  const baseDefines = physical.defines ?? {};\n\n  const uniforms: Record<string, THREE.IUniform> = THREE.UniformsUtils.clone(baseUniforms);\n\n  const defaults = new BaseMaterial(cfg.material || {}) as T & {\n    color?: THREE.Color;\n    roughness?: number;\n    metalness?: number;\n    envMap?: THREE.Texture;\n    envMapIntensity?: number;\n  };\n\n  if (defaults.color) uniforms.diffuse.value = defaults.color;\n  if ('roughness' in defaults) uniforms.roughness.value = defaults.roughness;\n  if ('metalness' in defaults) uniforms.metalness.value = defaults.metalness;\n  if ('envMap' in defaults) uniforms.envMap.value = defaults.envMap;\n  if ('envMapIntensity' in defaults) uniforms.envMapIntensity.value = defaults.envMapIntensity;\n\n  Object.entries(cfg.uniforms ?? {}).forEach(([key, u]) => {\n    uniforms[key] =\n      u !== null && typeof u === 'object' && 'value' in u\n        ? (u as THREE.IUniform<unknown>)\n        : ({ value: u } as THREE.IUniform<unknown>);\n  });\n\n  let vert = `${cfg.header}\\n${cfg.vertexHeader ?? ''}\\n${baseVert}`;\n  let frag = `${cfg.header}\\n${cfg.fragmentHeader ?? ''}\\n${baseFrag}`;\n\n  for (const [inc, code] of Object.entries(cfg.vertex ?? {})) {\n    vert = vert.replace(inc, `${inc}\\n${code}`);\n  }\n  for (const [inc, code] of Object.entries(cfg.fragment ?? {})) {\n    frag = frag.replace(inc, `${inc}\\n${code}`);\n  }\n\n  const mat = new THREE.ShaderMaterial({\n    defines: { ...baseDefines },\n    uniforms,\n    vertexShader: vert,\n    fragmentShader: frag,\n    lights: true,\n    fog: !!cfg.material?.fog\n  });\n\n  return mat;\n}\n\nconst CanvasWrapper: FC<{ children: ReactNode }> = ({ children }) => (\n  <Canvas dpr={[1, 2]} frameloop=\"always\" className=\"beams-container\">\n    {children}\n  </Canvas>\n);\n\nconst hexToNormalizedRGB = (hex: string): [number, number, number] => {\n  const clean = hex.replace('#', '');\n  const r = parseInt(clean.substring(0, 2), 16);\n  const g = parseInt(clean.substring(2, 4), 16);\n  const b = parseInt(clean.substring(4, 6), 16);\n  return [r / 255, g / 255, b / 255];\n};\n\nconst noise = `\nfloat random (in vec2 st) {\n    return fract(sin(dot(st.xy,\n                         vec2(12.9898,78.233)))*\n        43758.5453123);\n}\nfloat noise (in vec2 st) {\n    vec2 i = floor(st);\n    vec2 f = fract(st);\n    float a = random(i);\n    float b = random(i + vec2(1.0, 0.0));\n    float c = random(i + vec2(0.0, 1.0));\n    float d = random(i + vec2(1.0, 1.0));\n    vec2 u = f * f * (3.0 - 2.0 * f);\n    return mix(a, b, u.x) +\n           (c - a)* u.y * (1.0 - u.x) +\n           (d - b) * u.x * u.y;\n}\nvec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}\nvec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}\nvec3 fade(vec3 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}\nfloat cnoise(vec3 P){\n  vec3 Pi0 = floor(P);\n  vec3 Pi1 = Pi0 + vec3(1.0);\n  Pi0 = mod(Pi0, 289.0);\n  Pi1 = mod(Pi1, 289.0);\n  vec3 Pf0 = fract(P);\n  vec3 Pf1 = Pf0 - vec3(1.0);\n  vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);\n  vec4 iy = vec4(Pi0.yy, Pi1.yy);\n  vec4 iz0 = Pi0.zzzz;\n  vec4 iz1 = Pi1.zzzz;\n  vec4 ixy = permute(permute(ix) + iy);\n  vec4 ixy0 = permute(ixy + iz0);\n  vec4 ixy1 = permute(ixy + iz1);\n  vec4 gx0 = ixy0 / 7.0;\n  vec4 gy0 = fract(floor(gx0) / 7.0) - 0.5;\n  gx0 = fract(gx0);\n  vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);\n  vec4 sz0 = step(gz0, vec4(0.0));\n  gx0 -= sz0 * (step(0.0, gx0) - 0.5);\n  gy0 -= sz0 * (step(0.0, gy0) - 0.5);\n  vec4 gx1 = ixy1 / 7.0;\n  vec4 gy1 = fract(floor(gx1) / 7.0) - 0.5;\n  gx1 = fract(gx1);\n  vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);\n  vec4 sz1 = step(gz1, vec4(0.0));\n  gx1 -= sz1 * (step(0.0, gx1) - 0.5);\n  gy1 -= sz1 * (step(0.0, gy1) - 0.5);\n  vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);\n  vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);\n  vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);\n  vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);\n  vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);\n  vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);\n  vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);\n  vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);\n  vec4 norm0 = taylorInvSqrt(vec4(dot(g000,g000),dot(g010,g010),dot(g100,g100),dot(g110,g110)));\n  g000 *= norm0.x; g010 *= norm0.y; g100 *= norm0.z; g110 *= norm0.w;\n  vec4 norm1 = taylorInvSqrt(vec4(dot(g001,g001),dot(g011,g011),dot(g101,g101),dot(g111,g111)));\n  g001 *= norm1.x; g011 *= norm1.y; g101 *= norm1.z; g111 *= norm1.w;\n  float n000 = dot(g000, Pf0);\n  float n100 = dot(g100, vec3(Pf1.x,Pf0.yz));\n  float n010 = dot(g010, vec3(Pf0.x,Pf1.y,Pf0.z));\n  float n110 = dot(g110, vec3(Pf1.xy,Pf0.z));\n  float n001 = dot(g001, vec3(Pf0.xy,Pf1.z));\n  float n101 = dot(g101, vec3(Pf1.x,Pf0.y,Pf1.z));\n  float n011 = dot(g011, vec3(Pf0.x,Pf1.yz));\n  float n111 = dot(g111, Pf1);\n  vec3 fade_xyz = fade(Pf0);\n  vec4 n_z = mix(vec4(n000,n100,n010,n110),vec4(n001,n101,n011,n111),fade_xyz.z);\n  vec2 n_yz = mix(n_z.xy,n_z.zw,fade_xyz.y);\n  float n_xyz = mix(n_yz.x,n_yz.y,fade_xyz.x);\n  return 2.2 * n_xyz;\n}\n`;\n\ninterface BeamsProps {\n  beamWidth?: number;\n  beamHeight?: number;\n  beamNumber?: number;\n  lightColor?: string;\n  speed?: number;\n  noiseIntensity?: number;\n  scale?: number;\n  rotation?: number;\n}\n\nconst Beams: FC<BeamsProps> = ({\n  beamWidth = 2,\n  beamHeight = 15,\n  beamNumber = 12,\n  lightColor = '#ffffff',\n  speed = 2,\n  noiseIntensity = 1.75,\n  scale = 0.2,\n  rotation = 0\n}) => {\n  const meshRef = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>>(null!);\n\n  const beamMaterial = useMemo(\n    () =>\n      extendMaterial(THREE.MeshStandardMaterial, {\n        header: `\n  varying vec3 vEye;\n  varying float vNoise;\n  varying vec2 vUv;\n  varying vec3 vPosition;\n  uniform float time;\n  uniform float uSpeed;\n  uniform float uNoiseIntensity;\n  uniform float uScale;\n  ${noise}`,\n        vertexHeader: `\n  float getPos(vec3 pos) {\n    vec3 noisePos =\n      vec3(pos.x * 0., pos.y - uv.y, pos.z + time * uSpeed * 3.) * uScale;\n    return cnoise(noisePos);\n  }\n  vec3 getCurrentPos(vec3 pos) {\n    vec3 newpos = pos;\n    newpos.z += getPos(pos);\n    return newpos;\n  }\n  vec3 getNormal(vec3 pos) {\n    vec3 curpos = getCurrentPos(pos);\n    vec3 nextposX = getCurrentPos(pos + vec3(0.01, 0.0, 0.0));\n    vec3 nextposZ = getCurrentPos(pos + vec3(0.0, -0.01, 0.0));\n    vec3 tangentX = normalize(nextposX - curpos);\n    vec3 tangentZ = normalize(nextposZ - curpos);\n    return normalize(cross(tangentZ, tangentX));\n  }`,\n        fragmentHeader: '',\n        vertex: {\n          '#include <begin_vertex>': `transformed.z += getPos(transformed.xyz);`,\n          '#include <beginnormal_vertex>': `objectNormal = getNormal(position.xyz);`\n        },\n        fragment: {\n          '#include <dithering_fragment>': `\n    float randomNoise = noise(gl_FragCoord.xy);\n    gl_FragColor.rgb -= randomNoise / 15. * uNoiseIntensity;`\n        },\n        material: { fog: true },\n        uniforms: {\n          diffuse: new THREE.Color(...hexToNormalizedRGB('#000000')),\n          time: { shared: true, mixed: true, linked: true, value: 0 },\n          roughness: 0.3,\n          metalness: 0.3,\n          uSpeed: { shared: true, mixed: true, linked: true, value: speed },\n          envMapIntensity: 10,\n          uNoiseIntensity: noiseIntensity,\n          uScale: scale\n        }\n      }),\n    [speed, noiseIntensity, scale]\n  );\n\n  return (\n    <CanvasWrapper>\n      <group rotation={[0, 0, degToRad(rotation)]}>\n        <PlaneNoise ref={meshRef} material={beamMaterial} count={beamNumber} width={beamWidth} height={beamHeight} />\n        <DirLight color={lightColor} position={[0, 3, 10]} />\n      </group>\n      <ambientLight intensity={1} />\n      <color attach=\"background\" args={['#000000']} />\n      <PerspectiveCamera makeDefault position={[0, 0, 20]} fov={30} />\n    </CanvasWrapper>\n  );\n};\n\nfunction createStackedPlanesBufferGeometry(\n  n: number,\n  width: number,\n  height: number,\n  spacing: number,\n  heightSegments: number\n): THREE.BufferGeometry {\n  const geometry = new THREE.BufferGeometry();\n  const numVertices = n * (heightSegments + 1) * 2;\n  const numFaces = n * heightSegments * 2;\n  const positions = new Float32Array(numVertices * 3);\n  const indices = new Uint32Array(numFaces * 3);\n  const uvs = new Float32Array(numVertices * 2);\n\n  let vertexOffset = 0;\n  let indexOffset = 0;\n  let uvOffset = 0;\n  const totalWidth = n * width + (n - 1) * spacing;\n  const xOffsetBase = -totalWidth / 2;\n\n  for (let i = 0; i < n; i++) {\n    const xOffset = xOffsetBase + i * (width + spacing);\n    const uvXOffset = Math.random() * 300;\n    const uvYOffset = Math.random() * 300;\n\n    for (let j = 0; j <= heightSegments; j++) {\n      const y = height * (j / heightSegments - 0.5);\n      const v0 = [xOffset, y, 0];\n      const v1 = [xOffset + width, y, 0];\n      positions.set([...v0, ...v1], vertexOffset * 3);\n\n      const uvY = j / heightSegments;\n      uvs.set([uvXOffset, uvY + uvYOffset, uvXOffset + 1, uvY + uvYOffset], uvOffset);\n\n      if (j < heightSegments) {\n        const a = vertexOffset,\n          b = vertexOffset + 1,\n          c = vertexOffset + 2,\n          d = vertexOffset + 3;\n        indices.set([a, b, c, c, b, d], indexOffset);\n        indexOffset += 6;\n      }\n      vertexOffset += 2;\n      uvOffset += 4;\n    }\n  }\n\n  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));\n  geometry.setAttribute('uv', new THREE.BufferAttribute(uvs, 2));\n  geometry.setIndex(new THREE.BufferAttribute(indices, 1));\n  geometry.computeVertexNormals();\n  return geometry;\n}\n\nconst MergedPlanes = forwardRef<\n  THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>,\n  {\n    material: THREE.ShaderMaterial;\n    width: number;\n    count: number;\n    height: number;\n  }\n>(({ material, width, count, height }, ref) => {\n  const mesh = useRef<THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>>(null!);\n  useImperativeHandle(ref, () => mesh.current);\n  const geometry = useMemo(\n    () => createStackedPlanesBufferGeometry(count, width, height, 0, 100),\n    [count, width, height]\n  );\n  useFrame((_, delta) => {\n    mesh.current.material.uniforms.time.value += 0.1 * delta;\n  });\n  return <mesh ref={mesh} geometry={geometry} material={material} />;\n});\nMergedPlanes.displayName = 'MergedPlanes';\n\nconst PlaneNoise = forwardRef<\n  THREE.Mesh<THREE.BufferGeometry, THREE.ShaderMaterial>,\n  {\n    material: THREE.ShaderMaterial;\n    width: number;\n    count: number;\n    height: number;\n  }\n>((props, ref) => (\n  <MergedPlanes ref={ref} material={props.material} width={props.width} count={props.count} height={props.height} />\n));\nPlaneNoise.displayName = 'PlaneNoise';\n\nconst DirLight: FC<{ position: [number, number, number]; color: string }> = ({ position, color }) => {\n  const dir = useRef<THREE.DirectionalLight>(null!);\n  useEffect(() => {\n    if (!dir.current) return;\n    const cam = dir.current.shadow.camera as THREE.Camera & {\n      top: number;\n      bottom: number;\n      left: number;\n      right: number;\n      far: number;\n    };\n    cam.top = 24;\n    cam.bottom = -24;\n    cam.left = -24;\n    cam.right = 24;\n    cam.far = 64;\n    dir.current.shadow.bias = -0.004;\n  }, []);\n  return <directionalLight ref={dir} color={color} intensity={1} position={position} />;\n};\n\nexport default Beams;\n",
+      "cssCode": ".beams-container {\n  position: relative;\n  width: 100%;\n  height: 100%;\n}\n",
+      "usageCode": "import Beams from './Beams';\n\n<div style={{ width: '100%', height: '600px', position: 'relative' }}>\n  <Beams\n    beamWidth={3}\n    beamHeight={30}\n    beamNumber={20}\n    lightColor=\"#ffffff\"\n    speed={2}\n    noiseIntensity={1.75}\n    scale={0.2}\n    rotation={30}\n  />\n</div>",
+      "status": "published"
+    },
+    {
+      "id": "1773058272497",
+      "slug": "param",
+      "name": "Param",
+      "description": "ksejfskjnf",
+      "category": "Charts",
+      "framework": [
+        "React 18",
+        "TypeScript"
+      ],
+      "votes": [],
+      "comments": [],
+      "author": {
+        "name": "Admin",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Admin"
+      },
+      "previewImage": "https://placehold.co/600x400/7c3aed/ffffff?text=Param",
+      "installCmd": "",
+      "css": "tailwind",
+      "componentCode": ",knfkjsznfd",
+      "cssCode": ",sdnfsjdnf",
+      "usageCode": "kjdznglkd",
+      "status": "published",
+      "userId": "1",
+      "createdAt": "2026-03-09T12:11:12.497Z"
+    },
+    {
+      "id": "1001",
+      "slug": "animated-button",
+      "name": "Animated Button",
+      "description": "A beautiful button component with smooth hover animations",
+      "category": "Buttons",
+      "framework": [
+        "React 18",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "votes": [
+        "3a34"
+      ],
+      "comments": [
+        {
+          "id": "fd122587-c6ec-4adf-a2b0-748251420c10",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "kjsdbcjkwb",
+          "createdAt": 1772971040715
+        },
+        {
+          "id": "dbb49987-2895-401f-a850-e7c3a84c64bb",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "testing",
+          "createdAt": 1772972466031
+        },
+        {
+          "id": "dbd6c7f5-951e-40e2-b073-a2b6a8ddc100",
+          "userId": "3a34",
+          "username": "Param Dholakia",
+          "text": "testing 2",
+          "createdAt": 1772975923207
+        }
+      ],
+      "author": {
+        "name": "John Doe",
+        "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=John"
+      },
+      "previewImage": "https://placehold.co/600x400/6366f1/ffffff?text=Animated+Button",
+      "installCmd": "npm install framer-motion",
+      "css": "tailwind",
+      "status": "published"
+    }
+  ],
+  "component_versions": [],
+  "component_files": [],
+  "comments": [],
+  "likes": [],
+  "tags": [],
+  "component_tags": [],
+  "component_requests": [
+    {
+      "request_id": "REQ-1773043919942",
+      "category": "tables",
+      "component_name": "sadsad",
+      "description": "asdasdasdasdsd",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:11:59.942Z",
+      "status": "approved",
+      "id": "8300"
+    },
+    {
+      "request_id": "REQ-1773044018855",
+      "category": "media",
+      "component_name": "dfsf",
+      "description": "dsfdsfsdf",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:13:38.855Z",
+      "status": "rejected",
+      "id": "7588"
+    },
+    {
+      "request_id": "REQ-1773044029983",
+      "category": "navigation",
+      "component_name": "sadsadas",
+      "description": "sadasdasd",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:13:49.983Z",
+      "status": "approved",
+      "id": "d137"
+    },
+    {
+      "request_id": "REQ-1773044208763",
+      "category": "other",
+      "component_name": "sdasd",
+      "description": "dasdasdasdasd",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:16:48.763Z",
+      "status": "rejected",
+      "id": "70c4"
+    },
+    {
+      "request_id": "REQ-1773044462032",
+      "category": "tables",
+      "component_name": "abc",
+      "description": "sadsadasdasdas",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:21:02.032Z",
+      "status": "approved",
+      "id": "849f"
+    },
+    {
+      "request_id": "REQ-1773044781618",
+      "category": "forms",
+      "component_name": "sadasd",
+      "description": "asdasdasd",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:26:21.618Z",
+      "status": "approved",
+      "id": "89d5"
+    },
+    {
+      "id": "f952",
+      "request_id": "REQ-1773044921380",
+      "category": "dataviz",
+      "component_name": "ghj",
+      "description": "gdfgdfgdfgdf",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:28:41.380Z",
+      "status": "rejected"
+    },
+    {
+      "id": "8319",
+      "request_id": "REQ-1773045106450",
+      "category": "other",
+      "component_name": "yui",
+      "description": "fsdfsdfsdfs",
+      "username": "Faijan",
+      "createdAt": "2026-03-09T08:31:46.450Z",
+      "status": "approved"
+    }
+  ],
+  "activity_logs": [
+    {
+      "id": "log-1",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added Animated List",
+      "timestamp": "2026-03-01T10:00:00Z"
+    },
+    {
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: hey ",
+      "id": "log-1772692918506",
+      "timestamp": "2026-03-05T06:41:58.506Z"
+    },
+    {
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: NEED FOR animation button",
+      "id": "log-1772702378192",
+      "timestamp": "2026-03-05T09:19:38.192Z"
+    },
+    {
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component: NEED FOR animation button",
+      "id": "log-1772702378245",
+      "timestamp": "2026-03-05T09:19:38.245Z"
+    },
+    {
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: need for a animeted button",
+      "id": "log-1772704088721",
+      "timestamp": "2026-03-05T09:48:08.721Z"
+    },
+    {
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: Nedd some element",
+      "id": "log-1772704094207",
+      "timestamp": "2026-03-05T09:48:14.207Z"
+    },
+    {
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component: Jadeja",
+      "id": "log-1772717378711",
+      "timestamp": "2026-03-05T13:29:38.711Z"
+    },
+    {
+      "userId": "1",
+      "action": "DELETE_COMPONENT",
+      "details": "Deleted component: Jadeja",
+      "id": "log-1772718416674",
+      "timestamp": "2026-03-05T13:46:56.674Z"
+    },
+    {
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: jmj",
+      "id": "log-1772718449063",
+      "timestamp": "2026-03-05T13:47:29.063Z"
+    },
+    {
+      "id": "log-1772773910513",
+      "userId": "1",
+      "action": "DELETE_COMPONENT",
+      "details": "Deleted component: 4",
+      "timestamp": "2026-03-06T05:11:50.513Z"
+    },
+    {
+      "id": "log-1772773919104",
+      "userId": "1",
+      "action": "DELETE_COMPONENT",
+      "details": "Deleted component: 5",
+      "timestamp": "2026-03-06T05:11:59.104Z"
+    },
+    {
+      "id": "log-1773044332965",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: undefined",
+      "timestamp": "2026-03-09T08:18:52.965Z"
+    },
+    {
+      "id": "log-1773044333008",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: undefined",
+      "timestamp": "2026-03-09T08:18:53.008Z"
+    },
+    {
+      "id": "log-1773044333648",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: sadsad",
+      "timestamp": "2026-03-09T08:18:53.648Z"
+    },
+    {
+      "id": "log-1773044333679",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: sadsad",
+      "timestamp": "2026-03-09T08:18:53.679Z"
+    },
+    {
+      "id": "log-1773044335569",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: undefined",
+      "timestamp": "2026-03-09T08:18:55.569Z"
+    },
+    {
+      "id": "log-1773044335599",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: undefined",
+      "timestamp": "2026-03-09T08:18:55.599Z"
+    },
+    {
+      "id": "log-1773044336377",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: undefined",
+      "timestamp": "2026-03-09T08:18:56.377Z"
+    },
+    {
+      "id": "log-1773044336793",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: undefined",
+      "timestamp": "2026-03-09T08:18:56.793Z"
+    },
+    {
+      "id": "log-1773044337473",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: undefined",
+      "timestamp": "2026-03-09T08:18:57.473Z"
+    },
+    {
+      "id": "log-1773044449158",
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: dfsf",
+      "timestamp": "2026-03-09T08:20:49.158Z"
+    },
+    {
+      "id": "log-1773044449901",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: sadsadas",
+      "timestamp": "2026-03-09T08:20:49.901Z"
+    },
+    {
+      "id": "log-1773044449927",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: sadsadas",
+      "timestamp": "2026-03-09T08:20:49.927Z"
+    },
+    {
+      "id": "log-1773044450707",
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: sdasd",
+      "timestamp": "2026-03-09T08:20:50.707Z"
+    },
+    {
+      "id": "log-1773044476013",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: abc",
+      "timestamp": "2026-03-09T08:21:16.013Z"
+    },
+    {
+      "id": "log-1773044476058",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: abc",
+      "timestamp": "2026-03-09T08:21:16.058Z"
+    },
+    {
+      "id": "log-1773045111550",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: sadasd",
+      "timestamp": "2026-03-09T08:31:51.550Z"
+    },
+    {
+      "id": "log-1773045111593",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component from request: sadasd",
+      "timestamp": "2026-03-09T08:31:51.593Z"
+    },
+    {
+      "id": "log-1773045112160",
+      "userId": "1",
+      "action": "REQUEST_REJECTED",
+      "details": "Rejected request: ghj",
+      "timestamp": "2026-03-09T08:31:52.160Z"
+    },
+    {
+      "id": "log-1773045113292",
+      "userId": "1",
+      "action": "REQUEST_APPROVED",
+      "details": "Approved request: yui",
+      "timestamp": "2026-03-09T08:31:53.292Z"
+    },
+    {
+      "id": "log-1773045113318",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component: Demo1",
+      "timestamp": "2026-03-06T13:07:18.384Z"
+    },
+    {
+      "id": "log-1773051971730",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component: hehehe",
+      "timestamp": "2026-03-09T10:26:11.730Z"
+    },
+    {
+      "id": "log-1773052156631",
+      "userId": "1",
+      "action": "ADD_COMPONENT",
+      "details": "Added component: PARAM",
+      "timestamp": "2026-03-09T10:29:16.631Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

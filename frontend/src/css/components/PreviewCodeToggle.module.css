@@ -1,0 +1,17 @@
+@reference "../../index.css";
+
+.toggleContainer {
+  @apply inline-flex items-center rounded-full p-1 gap-1;
+}
+
+.toggleButton {
+  @apply px-5 py-2 rounded-full text-sm font-medium transition-all duration-200;
+}
+
+.toggleButtonActive {
+  @apply bg-white text-zinc-900 shadow-sm;
+}
+
+.toggleButtonInactive {
+  @apply text-zinc-400 hover:text-white;
+}

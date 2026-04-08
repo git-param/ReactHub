@@ -1,0 +1,39 @@
+@reference "../../index.css";
+
+.card {
+  background-color: var(--bg-primary);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.section {
+  @apply mx-auto px-20 py-20;
+}
+
+.header {
+  @apply flex justify-between items-center mb-12;
+}
+
+.title {
+  @apply text-2xl font-bold;
+}
+
+.subtitle {
+  @apply text-gray-100 dark:text-gray-400 mt-2;
+}
+
+.viewAllButton {
+  @apply px-4 py-2 border rounded-lg text-sm hover:bg-gray-100 dark:hover:bg-gray-800;
+}
+
+.emptyText {
+  @apply text-gray-500 dark:text-gray-400;
+}
+
+.grid {
+  @apply grid md:grid-cols-2 lg:grid-cols-3 gap-8;
+}

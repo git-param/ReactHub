@@ -1,0 +1,113 @@
+@reference "../../index.css";
+
+.pageWrapper {
+  @apply min-h-screen py-12;
+}
+
+.container {
+  @apply mx-auto max-w-3xl px-6;
+}
+
+.headerSection {
+  @apply mb-8;
+}
+
+.title {
+  @apply mb-4 text-4xl font-bold;
+}
+
+.subtitle {
+  @apply text-lg text-muted-foreground;
+}
+
+.successContainer {
+  @apply py-12 text-center;
+}
+
+.successIcon {
+  @apply mb-4 inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-950;
+}
+
+.successCheckIcon {
+  @apply h-8 w-8 text-green-600;
+}
+
+.successTitle {
+  @apply mb-2 text-xl font-semibold;
+}
+
+.successDescription {
+  @apply text-muted-foreground;
+}
+
+.form {
+  @apply space-y-6;
+}
+
+.formGroup {
+  @apply space-y-2;
+}
+
+.formHint {
+  @apply text-sm text-muted-foreground;
+}
+
+.buttonRow {
+  @apply flex gap-4;
+}
+
+.submitButton {
+  @apply flex-1;
+}
+
+.errorText {
+  @apply text-sm text-destructive;
+}
+
+.tipsCard {
+  @apply mt-6;
+}
+
+.tipsCardTitle {
+  @apply text-lg;
+}
+
+.tipsList {
+  @apply space-y-2 text-sm text-muted-foreground;
+}
+
+.tipItem {
+  @apply flex gap-2;
+}
+
+.tipBullet {
+  @apply text-purple-600;
+}
+
+.stepsGrid {
+  @apply max-w-4xl mx-auto mt-8 grid grid-cols-1 gap-8 md:grid-cols-3;
+}
+
+.stepCard {
+  @apply rounded-2xl border border-border bg-card p-4 text-center;
+}
+
+.stepIconViolet {
+  @apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-300;
+}
+
+.stepIconFuchsia {
+  @apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-950 dark:text-fuchsia-300;
+}
+
+.stepIconEmerald {
+  @apply mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-300;
+}
+
+.stepTitle {
+  @apply mb-2 font-semibold text-foreground;
+}
+
+.stepDescription {
+  @apply text-sm text-muted-foreground;
+}

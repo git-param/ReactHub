@@ -1,0 +1,41 @@
+@reference "../../index.css";
+
+.featuresWrapper {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-top: 1px solid var(--border-primary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.featureCard {
+  transition: transform 0.25s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+}
+
+.iconBox {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+
+  background: rgba(139, 92, 246, 0.12);
+  color: #8b5cf6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featuresGrid {
+  @apply px-20 py-20 flex flex-col md:flex-row justify-between gap-16;
+}
+
+.featureTitle {
+  @apply text-lg font-semibold mt-6;
+}
+
+.featureDescription {
+  @apply mt-3 text-sm opacity-70 leading-relaxed max-w-sm;
+}

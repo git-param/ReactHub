@@ -1,0 +1,41 @@
+@reference "../../index.css";
+
+.grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8;
+}
+
+.statCard {
+  @apply p-6 rounded-2xl border border-white/5 bg-white/5 backdrop-blur-sm;
+}
+
+.statLabel {
+  @apply text-zinc-500 text-sm font-medium mb-1;
+}
+
+.statValue {
+  @apply text-3xl font-bold text-white;
+}
+
+.colorBar {
+  @apply h-1 w-12 mt-4 rounded-full;
+}
+
+.errorHint {
+  @apply text-rose-400 text-xs mt-3;
+}
+
+.colorSky {
+  @apply bg-sky-500;
+}
+
+.colorViolet {
+  @apply bg-violet-500;
+}
+
+.colorEmerald {
+  @apply bg-emerald-500;
+}
+
+.colorAmber {
+  @apply bg-amber-500;
+}

@@ -1,0 +1,82 @@
+@reference "../../index.css";
+
+.pageWrapper {
+  @apply min-h-screen;
+  background-color: #0a0a0f;
+}
+
+.headerSection {
+  @apply max-w-7xl mx-auto px-6 pt-10 pb-6;
+}
+
+.title {
+  @apply text-3xl font-bold text-white mb-2;
+}
+
+.subtitle {
+  @apply text-zinc-500 text-sm;
+}
+
+.contentSection {
+  @apply max-w-7xl mx-auto px-6 pb-16;
+}
+
+.loadingContainer {
+  @apply flex items-center justify-center py-20;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(124, 58, 237, 0.2);
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.errorBox {
+  padding: 16px;
+  border-radius: 12px;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  font-size: 14px;
+}
+
+.emptyState {
+  @apply text-center py-20;
+}
+
+.emptyText {
+  @apply text-zinc-500 text-sm;
+}
+
+.componentsGrid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-20;
+}
+
+.requestWrapper {
+  @apply max-w-2xl mx-auto;
+}
+
+.requestCard {
+  @apply p-8 rounded-3xl bg-gradient-to-br from-violet-600/10 to-transparent border border-violet-500/20 backdrop-blur-md text-center;
+}
+
+.requestTitle {
+  @apply text-2xl font-bold text-white mb-2;
+}
+
+.requestDescription {
+  @apply text-zinc-400 text-sm mb-6;
+}
+
+.requestButton {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold transition-all shadow-lg shadow-violet-600/20;
+}

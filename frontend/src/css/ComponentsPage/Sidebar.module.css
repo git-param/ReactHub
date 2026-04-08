@@ -1,0 +1,41 @@
+@reference "../../index.css";
+
+.sidebar {
+  @apply sticky top-4;
+}
+
+.sectionTitle {
+  @apply mb-3 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400;
+}
+
+.categoryList {
+  @apply space-y-1;
+}
+
+.categoryButton {
+  @apply flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm font-medium transition-colors;
+}
+
+.categoryButtonActive {
+  @apply bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300;
+}
+
+.categoryButtonInactive {
+  @apply text-[var(--text-primary)] hover:bg-[var(--secondary)];
+}
+
+.categoryLabel {
+  @apply flex items-center gap-2;
+}
+
+.chevronIcon {
+  @apply h-4 w-4 text-gray-400;
+}
+
+.componentList {
+  @apply ml-6 mt-1 space-y-1 border-l-2 pl-3 border-[var(--border)];
+}
+
+.componentLink {
+  @apply block rounded px-3 py-1.5 text-sm transition-colors text-gray-600 dark:text-gray-400 hover:bg-purple-50 dark:hover:bg-purple-900/30 hover:text-purple-600;
+}

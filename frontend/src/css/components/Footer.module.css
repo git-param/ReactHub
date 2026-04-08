@@ -1,0 +1,28 @@
+@reference "../../index.css";
+
+.footer {
+  @apply border-t;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+.footerContainer {
+  @apply mx-2 px-6 py-8 flex flex-col md:flex-row justify-between items-center gap-6;
+}
+
+.logoLink {
+  @apply flex items-center;
+}
+
+.logoText {
+  @apply text-xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent ml-3;
+}
+
+.copyright {
+  @apply flex gap-8 text-sm opacity-70 font-bold;
+}
+
+.builtBy {
+  @apply text-sm opacity-70;
+}

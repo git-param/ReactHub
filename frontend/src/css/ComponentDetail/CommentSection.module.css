@@ -1,0 +1,33 @@
+@reference "../../index.css";
+
+.wrapper {
+  @apply mt-10;
+}
+
+.title {
+  @apply text-xl mb-4;
+}
+
+.commentList {
+  @apply space-y-3;
+}
+
+.commentCard {
+  @apply border p-3 rounded;
+}
+
+.commentAuthor {
+  @apply text-sm text-gray-400;
+}
+
+.inputRow {
+  @apply flex gap-2 mt-4;
+}
+
+.commentInput {
+  @apply flex-1 p-2 border rounded;
+}
+
+.postButton {
+  @apply px-4 bg-green-600 rounded disabled:opacity-50;
+}

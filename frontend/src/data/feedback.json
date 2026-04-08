@@ -1,0 +1,40 @@
+{
+  "feedbacks": [
+    {
+      "id": "1",
+      "name": "Jadeja",
+      "rating": 4,
+      "message": "sdasdasdasdasd",
+      "createdAt": "2026-03-06T11:27:03.246Z"
+    },
+    {
+      "id": "2",
+      "name": "Jadeja",
+      "rating": 5,
+      "message": "dsadasdasdasda",
+      "createdAt": "2026-03-06T11:29:05.492Z"
+    },
+    {
+      "id": "3",
+      "name": "Jadeja",
+      "rating": 5,
+      "message": "sadasdasdasd",
+      "createdAt": "2026-03-06T11:29:10.477Z"
+    },
+    {
+      "id": "4",
+      "name": "Jadeja",
+      "rating": 5,
+      "message": "dasdasdsadasdas",
+      "createdAt": "2026-03-06T11:29:23.945Z"
+    },
+    {
+      "id": 5,
+      "name": "Param Dholakia",
+      "rating": 1,
+      "message": "very bad ui",
+      "createdAt": "2026-03-09T03:35:56.176Z"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
