@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from config import get_settings
-from utils.constants import DB_ECHO, DB_POOL_SIZE, DB_MAX_OVERFLOW
+from app.config import get_settings
+from app.utils.constants import DB_ECHO, DB_POOL_SIZE, DB_MAX_OVERFLOW
 
 settings = get_settings()
 

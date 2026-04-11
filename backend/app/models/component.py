@@ -2,8 +2,8 @@ from sqlalchemy import Column, String, Text, Integer, DateTime, ForeignKey, Inde
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
-from database import Base
-from utils.constants import COMPONENT_STATUS_DRAFT
+from app.database import Base
+from app.utils.constants import COMPONENT_STATUS_DRAFT
 
 
 class Component(Base):

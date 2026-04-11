@@ -1,17 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import timedelta
-from database import get_db
-from models.user import User
-from schemas.user import UserCreate, UserResponse
-from utils.security import (
+from app.database import get_db
+from app.models.user import User
+from app.schemas.user import UserCreate, UserResponse
+from app.utils.security import (
     get_password_hash,
     verify_password,
     create_access_token,
 )
-from utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
-from config import get_settings
-from utils.constants import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
+from app.config import get_settings
+from app.utils.constants import ACCESS_TOKEN_EXPIRE_MINUTES
 
 router = APIRouter()
 settings = get_settings()

@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Index
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from database import Base
-from utils.constants import FEEDBACK_STATUS_NEW
+from app.database import Base
+from app.utils.constants import FEEDBACK_STATUS_NEW
 
 
 class Feedback(Base):

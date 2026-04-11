@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from .database import get_db
-from .models.user import User
-from .utils.security import verify_token
-from .config import get_settings
+from app.database import get_db
+from app.models.user import User
+from app.utils.security import verify_token
+from app.config import get_settings
 
 settings = get_settings()
 
