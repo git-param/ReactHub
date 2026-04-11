@@ -15,7 +15,7 @@ import {
   updateField,
   validateRegistrationForm,
 } from "../store/registerSlice";
-import { registerUser } from "../lib/auth";
+import { registerUser, saveAuthUser } from "../lib/auth";
 import { useAuth } from "../Context/AuthContext";
 import styles from "../css/pages/Register.module.css";
 
@@ -43,13 +43,16 @@ function RegisterPage() {
 
     setIsSubmitting(true);
     try {
-      const user = await registerUser({
+      const { user, token } = await registerUser({
         name: formData.name,
         email: formData.email,
         password: formData.password,
       });
 
       login(user);
+      if (token) {
+        saveAuthUser(user, token, false);
+      }
       dispatch(resetRegisterForm());
       navigate("/");
     }
