@@ -6,9 +6,9 @@ import { Label } from "../components/ui/label";
 import { Check, AlertCircle, Star } from "lucide-react";
 import styles from "../css/pages/Feedback.module.css";
 import starStyles from "../css/Feedback/Feedback.module.css";
-import { getAuthUser } from "../lib/auth";
+import { getAuthToken } from "../lib/auth";
 
-const FEEDBACK_API_BASE_URL = import.meta.env.VITE_FEEDBACK_API_URL ?? "http://localhost:3002";
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 const FEEDBACK_SUBMITTED_KEY = "feedback_submitted";
 
 export function FeedbackPage() {
@@ -56,48 +56,33 @@ export function FeedbackPage() {
     setSubmitError("");
 
     try {
-      const authUser = getAuthUser();
-      const userName = authUser?.name?.trim();
-      if (!userName) {
-        throw new Error("User not found in storage. Please login again.");
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error("Authentication token not found. Please login again.");
       }
 
-      const existingFeedbacksResponse = await fetch(`${FEEDBACK_API_BASE_URL}/feedbacks`);
-      if (!existingFeedbacksResponse.ok) {
-        throw new Error("Unable to read existing feedbacks.");
-      }
-      const existingFeedbacks = (await existingFeedbacksResponse.json()) as Array<{ id?: number | string }>;
-      const numericIds = existingFeedbacks
-        .map((item) => Number(item.id))
-        .filter((id) => Number.isFinite(id));
-      const nextId = numericIds.length ? Math.max(...numericIds) + 1 : 1;
-
-      const response = await fetch(`${FEEDBACK_API_BASE_URL}/feedbacks`, {
+      const response = await fetch(`${API_BASE_URL}/api/feedback/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify({
-          id: nextId,
-          name: userName,
-          rating,
           message: formData.message.trim(),
-          createdAt: new Date().toISOString(),
+          rating: rating,
         }),
       });
 
       if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error("Feedback API route not found. Ensure src/data/Feedback.json contains `feedbacks: []` and restart feedback-server.");
-        }
-        throw new Error(`Request failed (${response.status} ${response.statusText}).`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `Request failed (${response.status} ${response.statusText}).`);
       }
 
       setSubmitted(true);
       sessionStorage.setItem(FEEDBACK_SUBMITTED_KEY, "true");
     } catch (error) {
       if (error instanceof TypeError) {
-        setSubmitError(`Cannot reach feedback server at ${FEEDBACK_API_BASE_URL}. Start it with: npm run feedback-server`);
+        setSubmitError(`Cannot reach API server at ${API_BASE_URL}. Make sure backend is running.`);
       } else if (error instanceof Error) {
         setSubmitError(error.message);
       } else {

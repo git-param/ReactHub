@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.database import Base, engine
-from app.routes import auth
+from app.routes import auth, feedback
 
 settings = get_settings()
 
@@ -30,6 +30,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(feedback.router, prefix="/api/feedback", tags=["feedback"])
 
 @app.get("/health")
 def health_check():

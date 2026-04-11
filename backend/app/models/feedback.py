@@ -10,8 +10,9 @@ class Feedback(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
-    subject = Column(String(255), nullable=False)
+    subject = Column(String(255))
     message = Column(Text, nullable=False)
+    rating = Column(Integer, nullable=True)
     category = Column(String(100))
     status = Column(String(50), default=FEEDBACK_STATUS_NEW, index=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
@@ -23,3 +24,4 @@ class Feedback(Base):
     __table_args__ = (
         Index('idx_user_status_created', 'user_id', 'status', 'created_at'),
     )
+
