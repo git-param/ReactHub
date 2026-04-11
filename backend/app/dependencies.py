@@ -1,4 +1,6 @@
 from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer
+from starlette.requests import Request
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models.user import User
@@ -6,20 +8,32 @@ from app.utils.security import verify_token
 from app.config import get_settings
 
 settings = get_settings()
+security = HTTPBearer()
 
 
-def get_current_user(token: str, db: Session = Depends(get_db)) -> User:
-    """Get current authenticated user from JWT token."""
-    if not token:
+def get_current_user(
+    request: Request,
+    db: Session = Depends(get_db)
+) -> User:
+    """Get current authenticated user from JWT token in Authorization header."""
+    auth_header = request.headers.get("Authorization")
+    if not auth_header:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    # Remove "Bearer " prefix if present
-    if token.startswith("Bearer "):
-        token = token[7:]
+    # Extract token from "Bearer <token>"
+    parts = auth_header.split()
+    if len(parts) != 2 or parts[0].lower() != "bearer":
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authorization header",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    token = parts[1]
     
     payload = verify_token(token)
     if not payload:
@@ -40,7 +54,7 @@ def get_current_user(token: str, db: Session = Depends(get_db)) -> User:
     user = db.query(User).filter(User.id == int(user_id)).first()
     if not user:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found",
         )
     

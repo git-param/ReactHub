@@ -3,15 +3,17 @@ from sqlalchemy.orm import Session
 from datetime import timedelta
 from app.database import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse
+from app.schemas.user import UserCreate, UserResponse, LoginRequest, TokenResponse
 from app.utils.security import (
     get_password_hash,
     verify_password,
     create_access_token,
+    verify_token,
 )
 from app.utils.exceptions import UserAlreadyExistsException, InvalidCredentialsException
 from app.config import get_settings
 from app.utils.constants import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.dependencies import get_current_user
 
 router = APIRouter()
 settings = get_settings()
@@ -41,12 +43,12 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 
-@router.post("/login")
-async def login(email: str, password: str, db: Session = Depends(get_db)):
+@router.post("/login", response_model=TokenResponse)
+async def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     """Login user and return JWT token."""
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(User).filter(User.email == credentials.email).first()
     
-    if not user or not verify_password(password, user.password_hash):
+    if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
@@ -71,9 +73,6 @@ async def login(email: str, password: str, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=UserResponse)
-async def get_current_user_info(
-    current_user: User = Depends(lambda token: None),
-    db: Session = Depends(get_db)
-):
+async def get_current_user_info(current_user: User = Depends(get_current_user)):
     """Get current user information."""
     return current_user
