@@ -8,7 +8,15 @@ import CodeSection from "../components/ComponentDetail/CodeSection";
 import LikeSection from "../components/ComponentDetail/LikeSecion";
 import CommentSection from "../components/ComponentDetail/CommentSection";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+
+const normalizeComponent = (item: any): ComponentMeta => ({
+  ...item,
+  componentPath: item.componentPath ?? item.component_code_path,
+  componentCode: item.componentCode ?? item.component_code ?? '',
+  cssCode: item.cssCode ?? item.css_code ?? '',
+  usageCode: item.usageCode ?? item.usage_code ?? '',
+});
 
 export default function ComponentDetailPage() {
   const { id } = useParams();
@@ -24,14 +32,18 @@ export default function ComponentDetailPage() {
       }
 
       try {
-        const { data } = await axios.get<ComponentMeta[]>(`${API_BASE_URL}/components`);
-        const matchedComponent = data.find(
-          (item) => String(item.id) === id || item.slug === id,
-        );
-
-        setComponent(matchedComponent ?? null);
+        const { data } = await axios.get<ComponentMeta>(`${API_BASE_URL}/api/components/${id}`);
+        setComponent(data ? normalizeComponent(data) : null);
       } catch {
-        setComponent(null);
+        try {
+          const { data } = await axios.get<ComponentMeta[]>(`${API_BASE_URL}/api/components/browse/all`);
+          const matchedComponent = data.find(
+            (item) => String(item.id) === id || item.slug === id,
+          );
+          setComponent(matchedComponent ? normalizeComponent(matchedComponent) : null);
+        } catch {
+          setComponent(null);
+        }
       } finally {
         setLoading(false);
       }

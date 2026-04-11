@@ -1,0 +1,13 @@
+.rh-fallback-btn {
+	background: linear-gradient(135deg, #7c3aed, #a78bfa);
+	color: #ffffff;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 16px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.rh-fallback-btn:hover {
+	opacity: 0.92;
+}

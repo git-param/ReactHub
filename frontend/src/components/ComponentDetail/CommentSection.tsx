@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import styles from '../../css/ComponentDetail/CommentSection.module.css'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 type Props = {
   componentId: string
@@ -24,8 +24,12 @@ export default function CommentSection({ componentId }: Props) {
   useEffect(() => 
   {
     const fetchComments = async () => {
-      const { data: component } = await axios.get(`${API_BASE_URL}/components/${componentId}`)
-      setComments((component.comments || []).reverse())
+      try {
+        const { data: component } = await axios.get(`${API_BASE_URL}/api/components/${componentId}`)
+        setComments((component.comments || []).reverse())
+      } catch {
+        setComments([])
+      }
     }
     fetchComments()
   }, [componentId])
@@ -36,19 +40,23 @@ export default function CommentSection({ componentId }: Props) {
     const user = JSON.parse(localStorage.getItem("authUser") || "null")
     if (!user) 
       return alert("Login required")
-    const { data: component } = await axios.get(`${API_BASE_URL}/components/${componentId}`)
-    const updatedComments = component.comments || []
-    const newEntry: Comment = {
-      id: crypto.randomUUID(),
-      userId: user.id,
-      username: user.name,
-      text: newComment,
-      createdAt: Date.now()
+    try {
+      const { data: component } = await axios.get(`${API_BASE_URL}/api/components/${componentId}`)
+      const updatedComments = component.comments || []
+      const newEntry: Comment = {
+        id: crypto.randomUUID(),
+        userId: user.id,
+        username: user.name,
+        text: newComment,
+        createdAt: Date.now()
+      }
+      updatedComments.push(newEntry)
+      await axios.patch(`${API_BASE_URL}/api/components/${componentId}`, { comments: updatedComments })
+      setComments([...updatedComments].reverse())
+      setNewComment("")
+    } catch {
+      alert("Comments API is not available yet.")
     }
-    updatedComments.push(newEntry)
-    await axios.patch(`${API_BASE_URL}/components/${componentId}`, { comments: updatedComments })
-    setComments([...updatedComments].reverse())
-    setNewComment("")
   }
   return (
     <div className={styles.wrapper}>

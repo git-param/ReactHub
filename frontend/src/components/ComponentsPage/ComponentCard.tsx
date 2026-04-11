@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import React from 'react';
 import styles from '../../css/ComponentsPage/ComponentCard.module.css';
 import { getAuthUser } from '../../lib/auth';
+import { getPreviewComponent } from '../../utils/componentLoader';
 
 interface ComponentCardProps {
   component: Component;
 }
 
 export function ComponentCard({ component }: ComponentCardProps) {
+  const PreviewComponent = React.useMemo(() => getPreviewComponent(component), [component]);
+
   const [isLiked, setIsLiked] = React.useState(() => {
     const user = getAuthUser();
     if (!user) return false;
@@ -45,11 +48,21 @@ export function ComponentCard({ component }: ComponentCardProps) {
 
         {/* Preview Image */}
         <div className={styles.previewContainer}>
-          <img
-            src={component.previewImage}
-            alt={component.name}
-            className={styles.previewImage}
-          />
+          {PreviewComponent ? (
+            <div className={styles.previewImage} style={{ padding: '12px', overflow: 'hidden' }}>
+              <PreviewComponent />
+            </div>
+          ) : component.previewImage ? (
+            <img
+              src={component.previewImage}
+              alt={component.name}
+              className={styles.previewImage}
+            />
+          ) : (
+            <div className={styles.previewImage} style={{ display: 'grid', placeItems: 'center', color: '#a78bfa' }}>
+              Live preview available on detail page
+            </div>
+          )}
           {/* Category Badge */}
           <div className={styles.badgePosition}>
             <span className={styles.categoryBadge}>

@@ -3,13 +3,21 @@ import axios from 'axios';
 import type { ComponentMeta, User, ComponentRequest, ActivityLog, Comment, Like } from '../types/component';
 import { normalizeCategory } from '../utils/categories';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 type SectionKey = 'components' | 'users' | 'requests' | 'logs';
 type MutationKey = 'addComponent' | 'submitRequest' | 'updateRequestStatus' | 'deleteComponent';
 
 type RawComponent = Partial<ComponentMeta> & {
     id?: string | number;
     name?: string;
+    slug?: string;
+    component_code?: string;
+    css_code?: string;
+    usage_code?: string;
+    component_code_path?: string;
+    user_id?: string | number;
+    created_at?: string;
+    updated_at?: string;
     author?: {
         name?: string;
     };
@@ -25,15 +33,19 @@ const normalizeComponent = (component: RawComponent): ComponentMeta => {
     return {
         ...component,
         id: String(component.id ?? Date.now()),
+        slug: component.slug,
         title: component.title ?? component.name ?? 'Untitled Component',
+        name: component.name ?? component.title ?? 'Untitled Component',
         category: normalizeCategory(component.category),
         description: component.description ?? '',
         installCmd: normalizedInstallCmd,
-        componentCode: component.componentCode ?? '',
-        cssCode: component.cssCode ?? '',
-        usageCode: component.usageCode ?? '',
-        userId: component.userId ?? component.author?.name ?? 'unknown',
-        createdAt: component.createdAt ?? new Date().toISOString(),
+        componentCode: component.componentCode ?? component.component_code ?? '',
+        cssCode: component.cssCode ?? component.css_code ?? '',
+        usageCode: component.usageCode ?? component.usage_code ?? '',
+        componentPath: component.componentPath ?? component.component_code_path,
+        userId: String(component.userId ?? component.user_id ?? component.author?.name ?? 'unknown'),
+        createdAt: component.createdAt ?? component.created_at ?? new Date().toISOString(),
+        status: component.status ?? 'published',
     };
 };
 
@@ -128,7 +140,7 @@ export const useComponentStore = create<ComponentStore>((set, get) => ({
         }));
 
         try {
-            const { data } = await axios.get<RawComponent[]>(`${API_BASE_URL}/components`);
+            const { data } = await axios.get<RawComponent[]>(`${API_BASE_URL}/api/components/browse/all`);
 
             const components = data.map(normalizeComponent);
 
