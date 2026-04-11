@@ -24,6 +24,9 @@ function Navbar() {
         <Link to="/components">Components</Link>
         <Link to="/request">Request</Link>
         <Link to="/feedback">Feedback</Link>
+        {user?.role === "admin" && (
+          <Link to="/admin" className={NavbarCss.adminLink}>Admin Dashboard</Link>
+        )}
       </div>
 
       {/* Right */}
