@@ -6,8 +6,9 @@ import { ComponentsTable, UsersTable, RequestsTable, ActivityTable } from '../co
 import axios from 'axios';
 import styles from '../css/pages/AdminPanel.module.css';
 import { DEFAULT_COMPONENT_CATEGORIES } from '../utils/categories';
+import { getAuthToken } from '../lib/auth';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 
 interface ComponentForm {
     name: string;
@@ -64,6 +65,11 @@ function AdminPanel() {
         setError(null);
 
         try {
+            const token = getAuthToken();
+            if (!token) {
+                throw new Error("Authentication token not found. Please login again.");
+            }
+
             // Build slug from name
             const slug = form.name
                 .toLowerCase()
@@ -71,39 +77,49 @@ function AdminPanel() {
                 .replace(/(^-|-$)/g, '');
 
             const newComponent = {
-                id: String(Date.now()),
-                slug,
                 name: form.name,
+                slug: slug,
                 description: form.description,
                 category: form.category,
-                framework: form.framework.split(',').map(f => f.trim()).filter(Boolean),
-                votes: [],
-                comments: [],
-                author: {
-                    name: 'Admin',
-                    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Admin',
-                },
-                previewImage: `https://placehold.co/600x400/7c3aed/ffffff?text=${encodeURIComponent(form.name)}`,
-                installCmd: form.installCmd,
-                css: form.css,
-                componentCode: form.componentCode,
-                cssCode: form.cssCode,
-                usageCode: form.usageCode,
-                status: 'published',
-                userId: '1',
-                createdAt: new Date().toISOString(),
+                component_code: form.componentCode,
+                css_code: form.cssCode,
             };
 
-            await axios.post(`${API_BASE_URL}/components`, newComponent);
+            const response = await axios.post(
+                `${API_BASE_URL}/api/components/`,
+                newComponent,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`,
+                    },
+                }
+            );
 
-            setForm({ ...EMPTY_FORM });
-            setSuccess(true);
-            setTimeout(() => {
-                setSuccess(false);
-                setShowAddModal(false);
-            }, 2000);
-        } catch {
-            setError('Failed to add component. Make sure the server is running (npm run server).');
+            if (response.status === 201) {
+                setForm({ ...EMPTY_FORM });
+                setSuccess(true);
+                setTimeout(() => {
+                    setSuccess(false);
+                    setShowAddModal(false);
+                    fetchData(); // Refresh the components list
+                }, 2000);
+            }
+        } catch (err: unknown) {
+            let errorMessage = 'Failed to add component. Please check your input and try again.';
+            
+            if (axios.isAxiosError(err)) {
+                if (err.response?.data) {
+                    const data = err.response.data as any;
+                    errorMessage = data.detail || data.message || JSON.stringify(data);
+                } else if (err.message) {
+                    errorMessage = err.message;
+                }
+            } else if (err instanceof Error) {
+                errorMessage = err.message;
+            }
+            
+            setError(errorMessage);
         } finally {
             setSubmitting(false);
         }

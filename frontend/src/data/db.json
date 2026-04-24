@@ -8,41 +8,10 @@
       "id": "1"
     },
     {
-      "name": "Yash",
-      "email": "yash@gmail.com",
-      "password": "Yash@1234",
-      "id": "2"
-    },
-    {
-      "name": "aksh",
-      "email": "aksh@gmail.com",
-      "password": "s$SP$#Gpz6N2zqsVk^nn",
-      "id": "3"
-    },
-    {
-      "id": "3a34",
+      "id": "1b9a",
       "name": "Param Dholakia",
       "email": "param.inexture@gmail.com",
-      "password": "Param@2004"
-    },
-    {
-      "id": "271a",
-      "name": "Jadeja",
-      "email": "mouryrajjadeja@gmail.com",
-      "password": "Mj@banna8"
-    },
-    {
-      "id": "134f",
-      "name": "Yash Patel",
-      "email": "yash123@gmail.com",
-      "password": "Yash@123",
-      "role": "user"
-    },
-    {
-      "id": "440f",
-      "name": "Param Dholakia",
-      "email": "param@gmail.com",
-      "password": "Param1234@",
+      "password": "Param@2004",
       "role": "user"
     }
   ],

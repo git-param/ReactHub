@@ -1,13 +1,21 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001";
+const API_BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 const AUTH_USER_KEY = "rh_auth_user";
+const AUTH_TOKEN_KEY = "rh_auth_token";
 const CONTEXT_AUTH_USER_KEY = "authUser";
 
-type UserRecord = {
-  id: number | string;
+type BackendUserResponse = {
+  id: number;
   name: string;
   email: string;
-  password: string;
   role?: "admin" | "user";
+  is_active: boolean;
+  created_at: string;
+};
+
+type BackendLoginResponse = {
+  access_token: string;
+  token_type: string;
+  user: BackendUserResponse;
 };
 
 export type AuthUser = {
@@ -23,7 +31,7 @@ export type RegisterPayload = {
   password: string;
 };
 
-const toPublicUser = (user: UserRecord): AuthUser => ({
+const toPublicUser = (user: BackendUserResponse): AuthUser => ({
   id: user.id,
   name: user.name,
   email: user.email,
@@ -73,16 +81,20 @@ const getStorageUserByKey = (storage: Storage, key: string) => {
   }
 };
 
-export const saveAuthUser = (user: AuthUser, remember: boolean) => {
-  const serialized = JSON.stringify(user);
+export const saveAuthUser = (user: AuthUser, token: string, remember: boolean) => {
+  const userSerialized = JSON.stringify(user);
   if (remember) {
-    localStorage.setItem(AUTH_USER_KEY, serialized);
+    localStorage.setItem(AUTH_USER_KEY, userSerialized);
+    localStorage.setItem(AUTH_TOKEN_KEY, token);
     sessionStorage.removeItem(AUTH_USER_KEY);
+    sessionStorage.removeItem(AUTH_TOKEN_KEY);
     return;
   }
 
-  sessionStorage.setItem(AUTH_USER_KEY, serialized);
+  sessionStorage.setItem(AUTH_USER_KEY, userSerialized);
+  sessionStorage.setItem(AUTH_TOKEN_KEY, token);
   localStorage.removeItem(AUTH_USER_KEY);
+  localStorage.removeItem(AUTH_TOKEN_KEY);
 };
 
 export const getAuthUser = () =>
@@ -90,30 +102,43 @@ export const getAuthUser = () =>
   getStorageUser(sessionStorage) ??
   getStorageUserByKey(localStorage, CONTEXT_AUTH_USER_KEY);
 
+export const getAuthToken = () =>
+  localStorage.getItem(AUTH_TOKEN_KEY) ?? 
+  sessionStorage.getItem(AUTH_TOKEN_KEY);
+
 export const clearAuthUser = () => {
   localStorage.removeItem(AUTH_USER_KEY);
+  localStorage.removeItem(AUTH_TOKEN_KEY);
   sessionStorage.removeItem(AUTH_USER_KEY);
+  sessionStorage.removeItem(AUTH_TOKEN_KEY);
 };
 
 export const loginUser = async (email: string, password: string) => {
   try {
     const normalizedEmail = email.trim().toLowerCase();
-    const query = new URLSearchParams({
-      email: normalizedEmail,
-      password,
+
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: normalizedEmail,
+        password: password,
+      }),
     });
 
-    const response = await fetch(`${API_BASE_URL}/users?${query.toString()}`);
     if (!response.ok) {
-      throw new Error("Unable to reach auth server.");
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.detail || "Invalid email or password.");
     }
 
-    const users = (await response.json()) as UserRecord[];
-    if (!users.length) {
-      throw new Error("Invalid Credentials.");
-    }
-
-    return toPublicUser(users[0]);
+    const loginResponse = (await response.json()) as BackendLoginResponse;
+    
+    return {
+      user: toPublicUser(loginResponse.user),
+      token: loginResponse.access_token,
+    };
   } catch (error) {
     throw new Error(parseErrorMessage(error));
   }
@@ -123,20 +148,7 @@ export const registerUser = async (payload: RegisterPayload) => {
   try {
     const normalizedEmail = payload.email.trim().toLowerCase();
 
-    const existingResponse = await fetch(
-      `${API_BASE_URL}/users?email=${encodeURIComponent(normalizedEmail)}`,
-    );
-
-    if (!existingResponse.ok) {
-      throw new Error("Unable to validate email.");
-    }
-
-    const existingUsers = (await existingResponse.json()) as UserRecord[];
-    if (existingUsers.length) {
-      throw new Error("An account with this email already exists.");
-    }
-
-    const createResponse = await fetch(`${API_BASE_URL}/users`, {
+    const createResponse = await fetch(`${API_BASE_URL}/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -145,16 +157,19 @@ export const registerUser = async (payload: RegisterPayload) => {
         name: payload.name.trim(),
         email: normalizedEmail,
         password: payload.password,
-        role: "user",
       }),
     });
 
     if (!createResponse.ok) {
-      throw new Error("Could not create account.");
+      const errorData = await createResponse.json().catch(() => ({}));
+      throw new Error(errorData.detail || "Could not create account.");
     }
 
-    const createdUser = (await createResponse.json()) as UserRecord;
-    return toPublicUser(createdUser);
+    const createdUser = (await createResponse.json()) as BackendUserResponse;
+    return {
+      user: toPublicUser(createdUser),
+      token: null,
+    };
   } catch (error) {
     throw new Error(parseErrorMessage(error));
   }

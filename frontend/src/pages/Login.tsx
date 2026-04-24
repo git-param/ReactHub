@@ -7,7 +7,7 @@ import { Label } from "../components/ui/label";
 import { Checkbox } from "../components/ui/checkbox";
 import { Eye, EyeOff } from "lucide-react";
 import Logo from "../components/ui/Logo";
-import { loginUser } from "../lib/auth";
+import { loginUser, saveAuthUser } from "../lib/auth";
 import { useAuth } from "../Context/AuthContext";
 import styles from "../css/pages/Login.module.css";
 
@@ -32,9 +32,11 @@ export function LoginPage() {
     setIsSubmitting(true);
 
     try {
-      const user = await loginUser(formData.email, formData.password);
+      const { user, token } = await loginUser(formData.email, formData.password);
 
       login(user);
+      saveAuthUser(user, token, formData.remember);
+      
       // Admin users always land on admin dashboard after login.
       if (user.role === "admin") {
         navigate("/admin", { replace: true });

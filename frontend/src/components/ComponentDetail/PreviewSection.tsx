@@ -8,7 +8,6 @@ type Props = {
 }
 
 export default function PreviewSection({ component }: Props) {
-
   const PreviewComponent = useMemo(
     () => getPreviewComponent(component),
     [component]
